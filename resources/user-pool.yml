@@ -1,0 +1,10 @@
+Type: AWS::Cognito::UserPool
+Properties:
+  UserPoolName: ${self:custom.userPoolName}
+  # MfaConfiguration: ON
+  AliasAttributes:
+    - email
+  AutoVerifiedAttributes:
+    - email
+  EmailVerificationMessage: Onay kodu {####}.
+  EmailVerificationSubject: \[${self:custom.clientName}\] Onay
