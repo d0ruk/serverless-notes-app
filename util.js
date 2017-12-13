@@ -14,8 +14,8 @@ const defaultHeaders = {
   "Access-Control-Allow-Credentials": true
 }
 
-export const success = body => buildResponse(200, body);
-export const failure = body => buildResponse(500, body);
+export const success = (body, code=200) => buildResponse(code, body);
+export const failure = (body, code=500) => buildResponse(code, body);
 
 export function callDb(action, params) {
   if (!allowedDbMethods.includes(action)) {

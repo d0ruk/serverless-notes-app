@@ -1,4 +1,4 @@
-An implementation of the [Serverless Stack](http://serverless-stack.com) example app.
+An implementation of the [Serverless Stack](http://serverless-stack.com) example app. (1/3 complete)
 
 ### Usage
   1. Clone the repo
