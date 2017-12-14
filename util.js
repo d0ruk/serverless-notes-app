@@ -19,7 +19,7 @@ export const failure = (body, code=500) => buildResponse(code, body);
 
 export function callDb(action, params) {
   if (!allowedDbMethods.includes(action)) {
-    throw new Error(`Action ${action} is not an allowed DB operation.`)
+    throw new Error(`Action ${action} is not an allowed DB operation.`);
   }
 
   const dynamoDb = new DynamoDB.DocumentClient();
@@ -29,7 +29,7 @@ export function callDb(action, params) {
 
 function buildResponse(statusCode, body, headers={}) {
   return {
-    statusCode: statusCode,
+    statusCode,
     headers: {
       ...defaultHeaders,
       ...headers
