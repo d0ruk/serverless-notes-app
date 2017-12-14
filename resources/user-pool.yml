@@ -8,3 +8,10 @@ Properties:
     - email
   EmailVerificationMessage: Onay kodu {####}.
   EmailVerificationSubject: \[${self:custom.clientName}\] Onay
+  Policies:
+    PasswordPolicy:
+      MinimumLength: 8
+      RequireLowercase: true
+      RequireNumbers: true
+      RequireUppercase: true
+      RequireSymbols: false

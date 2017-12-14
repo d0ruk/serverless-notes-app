@@ -1,10 +1,9 @@
 Type: AWS::Cognito::IdentityPool
 Properties:
   IdentityPoolName: ${self:custom.identityPoolName}
-  # AllowUnauthenticatedIdentities: true
+  AllowUnauthenticatedIdentities: false
   CognitoIdentityProviders:
-    -
-      ClientId:
+    - ClientId:
         Ref: UserPoolClient
       ProviderName:
         Fn::GetAtt: [ UserPool, ProviderName ]

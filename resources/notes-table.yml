@@ -2,18 +2,14 @@ Type: AWS::DynamoDB::Table
 Properties:
   TableName: ${self:custom.tableName}
   AttributeDefinitions:
-    -
-      AttributeName: noteId
+    - AttributeName: noteId
       AttributeType: S
-    -
-      AttributeName: userId
+    - AttributeName: userId
       AttributeType: S
   KeySchema:
-    -
-      AttributeName: userId
+    - AttributeName: userId
       KeyType: HASH
-    -
-      AttributeName: noteId
+    - AttributeName: noteId
       KeyType: RANGE
   ProvisionedThroughput:
     ReadCapacityUnits: 5

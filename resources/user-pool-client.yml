@@ -4,3 +4,5 @@ Properties:
   UserPoolId:
     Ref: UserPool
   GenerateSecret: false
+  ExplicitAuthFlows:
+    - ADMIN_NO_SRP_AUTH # needed for admin access from CLI

@@ -9,13 +9,11 @@ provider:
   region: ${opt:region, "eu-central-1"}
   environment:
     TABLE_NAME: ${self:custom.tableName}
-
   iamRoleStatements:
-    -
-      Effect: Allow
+    - Effect: Allow
       Action:
         - dynamodb:*
-      Resource: "arn:aws:dynamodb:${self:provider.stage}:*:*"
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:*
 
 functions:
   create:
@@ -60,23 +58,22 @@ functions:
           authorizer: aws_iam
 
 resources:
+  Description: ${self:service} stack
   Resources:
     NotesTable:
       $ref: ./resources/notes-table.yml
-    # IdentityPool:
-    #   $ref: ./resources/identity-pool.yml
-    # UserPoolClient:
-    #   $ref: ./resources/user-pool-client.yml
-    # UserPool:
-    #   $ref: ./resources/user-pool.yml
+    IdentityPool:
+      $ref: ./resources/identity-pool.yml
+    UserPoolClient:
+      $ref: ./resources/user-pool-client.yml
+    UserPool:
+      $ref: ./resources/user-pool.yml
+    CognitoAuthorizedRole:
+      $ref: ./resources/authorized-role.yml
+    CognitoRoleMapping:
+      $ref: ./resources/role-mapping.yml
   Outputs:
-    NotesTableName:
-      Value:
-        Ref: NotesTable
-      Export:
-        Name: NotesTableName
-    Region:
-      Value: ${self:provider.region}
+      $ref: ./resources/outputs.yml
 
 plugins:
   - serverless-webpack
@@ -84,9 +81,9 @@ plugins:
 
 custom:
   webpackIncludeModules: true
-  tableName: ${self:service}-table
-  userPoolName: user-pool-${self:service}-${self:provider.stage}
-  clientName: ${file(./package.json):name}
-  identityPoolName: identity-pool-${self:service}-${self:provider.stage}
+  tableName: ${self:service}-table-${self:provider.stage}
+  userPoolName: ${self:service}-userpool-${self:provider.stage}
+  identityPoolName: ${self:service}_identitypool_${self:provider.stage}
+  clientName: ${file(./package.json):name}-${self:provider.stage}
   output:
     file: ./output.json

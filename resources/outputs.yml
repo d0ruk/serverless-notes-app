@@ -1,0 +1,14 @@
+NotesTableArn:
+  Value:
+    Fn::GetAtt: [ NotesTable, Arn ]
+Region:
+  Value: ${self:provider.region}
+UserPool:
+  Value:
+    Ref: UserPool
+UserPoolClient:
+  Value:
+    Ref: UserPoolClient
+IdentityPool:
+  Value:
+    Ref: IdentityPool
