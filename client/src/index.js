@@ -1,12 +1,21 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from "react-router-dom";
+import "./index.css"
+import React from "react"
+import ReactDOM from "react-dom"
+import registerServiceWorker from "./registerServiceWorker"
+import { BrowserRouter as Router } from "react-router-dom"
+import Amplify from "aws-amplify"
 
-import 'sanitize.css'
-import './index.css';
-import App from './App';
+import App from "./App"
+import StackOutput from "../../output.json"
 
-import registerServiceWorker from './registerServiceWorker';
+Amplify.configure({
+  Auth: {
+    identityPoolId: StackOutput.IdentityPool,
+    region: StackOutput.Region,
+    userPoolId: StackOutput.UserPool,
+    userPoolWebClientId: StackOutput.UserPoolClient,
+  }
+});
 
 ReactDOM.render(
   <Router>
@@ -17,6 +26,6 @@ ReactDOM.render(
 
 registerServiceWorker();
 
-if (module.hot && process.env.NODE_ENV !== 'production') {
+if (module.hot && process.env.NODE_ENV !== "production") {
   module.hot.accept();
 }

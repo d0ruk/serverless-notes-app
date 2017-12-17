@@ -1,0 +1,8 @@
+.wrapper {
+  & h3 {
+    margin-top: 2rem;
+    font-variant: small-caps;
+    font-size: 2rem;
+    text-align: center;
+  }
+}

@@ -1,0 +1,9 @@
+.inputGroup {
+  > * {
+    margin-top: .5rem;
+  }
+
+  > button {
+    margin-right: auto;
+  }
+}
