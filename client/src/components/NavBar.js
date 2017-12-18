@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 import { List as routesArray } from "../routes"
 
 export default props => (
-  <Menu theme="dark" mode="inline">
+  <Menu theme="dark" mode="vertical">
     {routesArray.map(({ name, iconType, href }) => (
       <Menu.Item key={name}>
         <Icon type={iconType} />

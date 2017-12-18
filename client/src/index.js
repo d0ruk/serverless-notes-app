@@ -3,10 +3,12 @@ import React from "react"
 import ReactDOM from "react-dom"
 import registerServiceWorker from "./registerServiceWorker"
 import { BrowserRouter as Router } from "react-router-dom"
+import { Provider } from "react-redux"
 import Amplify from "aws-amplify"
 
-import App from "./App"
 import StackOutput from "../../output.json"
+import App from "./App"
+import createStore from "./state"
 
 Amplify.configure({
   Auth: {
@@ -17,15 +19,23 @@ Amplify.configure({
   }
 });
 
-ReactDOM.render(
-  <Router>
-    <App />
-  </Router>,
+let store = createStore();
+
+const render = (Component, props={}) => ReactDOM.render(
+  <Provider store={store}>
+    <Router>
+      <Component {...props} />
+    </Router>
+  </Provider>,
   document.getElementById("root")
 );
 
 registerServiceWorker();
+render(App);
 
 if (module.hot && process.env.NODE_ENV !== "production") {
-  module.hot.accept();
+  module.hot.accept("./App", () => {
+    const NewApp = require("./App").default;
+		render(NewApp);
+  });
 }

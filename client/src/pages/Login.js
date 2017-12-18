@@ -1,23 +1,28 @@
 import React, { Component } from "react"
 import { Row, Col, Input, Icon, Button } from "antd"
-import { Auth } from "aws-amplify"
+import { connect } from "react-redux"
 
 import styles from "./Login.css"
+import { loginUser, setEmail, setPassword } from "../state/actions/auth-actions"
 
+@connect(
+  ({ auth: { email, password } }) => ({ email, password }),
+  { loginUser, setEmail, setPassword }
+)
 export default class Login extends Component {
-  state = {
-    email: "",
-    password: ""
-  };
-
   handleChange = event => {
-    this.setState({
-      [event.target.id]: event.target.value
-    });
+    const field = event.target.id;
+    const value = event.target.value;
+
+    if (field === "email") {
+      this.props.setEmail(value);
+    } else if (field === "password") {
+      this.props.setPassword(value);
+    }
   }
 
   isValid = () => {
-    const { email, password } = this.state;
+    const { email, password } = this.props;
 
     return email !== "" && password !== "";
   }
@@ -26,18 +31,16 @@ export default class Login extends Component {
     evt.preventDefault();
     if (!this.isValid()) return;
 
-    const { email, password } = this.state;
-
-    return Auth.signIn(email, password)
-      .then(console.log, window.alert)
+    const { email, password } = this.props;
+    this.props.loginUser(email, password);
   }
 
   render() {
-    const { email, password } = this.state;
+    const { email, password } = this.props;
 
     return (
       <Row gutter={16} className="Login">
-        <Col xs={24} md={6}>
+        <Col xs={24} md={12} lg={6}>
           <h3 style={{textAlign: "center"}}>Login</h3>
           <Input.Group className={styles.inputGroup}>
             <Input
