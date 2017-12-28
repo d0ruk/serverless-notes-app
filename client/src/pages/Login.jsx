@@ -11,11 +11,6 @@ import { loginUser, setEmail, setPassword } from "../state/actions/auth-actions"
   { loginUser, setEmail, setPassword },
 )
 export default class Login extends Component {
-  constructor(...args) {
-    super(...args);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
   static propTypes = {
     loginUser: func.isRequired,
     setEmail: func.isRequired,
@@ -88,7 +83,7 @@ export default class Login extends Component {
     return email !== "" && password !== "";
   }
 
-  async handleSubmit(evt) {
+  handleSubmit = async evt => {
     evt.preventDefault();
     if (!this.isValid()) return;
 

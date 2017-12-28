@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "dependencies": {
     "antd": "^3.0.1",
-    "aws-amplify": "^0.1.20",
+    "aws-amplify": "^0.1.30",
     "object-assign": "4.1.1",
     "promise": "8.0.1",
     "prop-types": "^15.6.0",
@@ -65,6 +65,7 @@
       "indent": 0,
       "arrow-parens": 0,
       "react/sort-comp": 0,
+      "react/no-typos": 1,
       "react/require-default-props": 0,
       "react/jsx-indent": 0,
       "jsx-a11y/anchor-is-valid": 0,
