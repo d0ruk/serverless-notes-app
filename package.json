@@ -3,9 +3,7 @@
   "version": "1.1.0",
   "description": "note taking app",
   "main": "handler.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "scripts": {},
   "keywords": [],
   "author": "Doruk Kutlu",
   "repository": {
@@ -14,18 +12,20 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "aws-sdk": "^2.112.0",
+    "aws-api-gateway-cli-test": "^1.2.0",
     "babel-core": "^6.26.0",
+    "babel-eslint": "^8.1.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
+    "eslint": "^4.14.0",
     "serverless-stack-output": "^0.2.3",
     "serverless-webpack": "^3.0.0",
     "webpack": "^3.5.6",
     "webpack-node-externals": "^1.6.0"
   },
   "dependencies": {
-    "aws-api-gateway-cli-test": "^1.2.0",
+    "aws-sdk": "^2.112.0",
     "uuid": "^3.1.0"
   }
 }

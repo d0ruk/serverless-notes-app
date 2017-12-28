@@ -6,7 +6,7 @@ const TableName = process.env.TABLE_NAME;
 export default async function main(evt, ctx, cb) {
   let data;
   try {
-    data = JSON.parse(evt.body)
+    data = JSON.parse(evt.body);
   } catch(err) {
     return cb(null, failure({ error: err.message }));
   }

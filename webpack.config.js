@@ -13,13 +13,11 @@ module.exports = {
   devtool: "source-map",
   externals: [nodeExternals()],
   module: {
-    rules: [
-      {
-        test: /\.js$/,
-        loader: "babel-loader",
-        include: __dirname,
-        exclude: /node_modules/
-      }
-    ]
+    rules: [{
+      test: /\.js$/,
+      loader: "babel-loader",
+      include: __dirname,
+      exclude: /node_modules/
+    }]
   }
 };

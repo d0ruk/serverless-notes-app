@@ -22,9 +22,9 @@ export function callDb(action, params) {
     throw new Error(`Action ${action} is not an allowed DB operation.`);
   }
 
-  const dynamoDb = new DynamoDB.DocumentClient();
+  const client = new DynamoDB.DocumentClient();
 
-  return dynamoDb[action](params).promise();
+  return client[action](params).promise();
 }
 
 function buildResponse(statusCode, body, headers={}) {

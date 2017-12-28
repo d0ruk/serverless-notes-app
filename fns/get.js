@@ -22,7 +22,7 @@ export default async function main(evt, ctx, cb) {
     } else {
       cb(null, failure({ error: "Item not found." }));
     }
-  } catch (e) {
+  } catch (err) {
     cb(null, failure({ error: err.message }));
   }
 }
