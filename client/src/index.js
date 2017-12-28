@@ -1,14 +1,10 @@
-import "./index.css"
-import React from "react"
-import ReactDOM from "react-dom"
-import registerServiceWorker from "./registerServiceWorker"
-import { BrowserRouter as Router } from "react-router-dom"
-import { Provider } from "react-redux"
-import Amplify from "aws-amplify"
+import Amplify from "aws-amplify";
 
-import StackOutput from "../../output.json"
-import App from "./App"
-import createStore from "./state"
+import registerServiceWorker from "./registerServiceWorker";
+import "./index.css";
+import StackOutput from "../../output.json";
+import render from "./render";
+import App from "./App";
 
 Amplify.configure({
   Auth: {
@@ -16,26 +12,16 @@ Amplify.configure({
     region: StackOutput.Region,
     userPoolId: StackOutput.UserPool,
     userPoolWebClientId: StackOutput.UserPoolClient,
-  }
+  },
 });
-
-let store = createStore();
-
-const render = (Component, props={}) => ReactDOM.render(
-  <Provider store={store}>
-    <Router>
-      <Component {...props} />
-    </Router>
-  </Provider>,
-  document.getElementById("root")
-);
 
 registerServiceWorker();
 render(App);
 
+/* eslint-disable */
 if (module.hot && process.env.NODE_ENV !== "production") {
-  module.hot.accept("./App", () => {
-    const NewApp = require("./App").default;
+  module.hot.accept("./App.jsx", () => {
+    const NewApp = require("./App.jsx").default;
 		render(NewApp);
   });
 }

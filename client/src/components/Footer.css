@@ -1,0 +1,13 @@
+.wrapper {
+  text-align: center;
+}
+
+.logo {
+  animation: logo-anim 2 3s ease-in-out;
+}
+
+@keyframes logo-anim {
+  0% { opacity: 1; }
+  50% { opacity: .1; }
+  100% { opacity: 1; }
+}
