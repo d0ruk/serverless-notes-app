@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Row, Col, Input, Icon, Button } from "antd";
 import { connect } from "react-redux";
-import { func, string } from "prop-types";
+import { func, string, bool } from "prop-types";
+import { Helmet } from "react-helmet";
 
 import styles from "./Login.css";
 import { loginUser, setEmail, setPassword } from "../state/actions/auth-actions";
@@ -19,6 +20,9 @@ export default class Login extends Component {
     password: string,
     error: string,
   }
+  static contextTypes = {
+    loggedIn: bool.isRequired,
+  };
 
   componentDidMount() {
     this.emailField.focus();
@@ -29,6 +33,9 @@ export default class Login extends Component {
 
     return (
       <Row>
+        <Helmet>
+          <title>Login</title>
+        </Helmet>
         <Col xs={24} md={12} lg={6} className={styles.column}>
           <h3 className={styles.header}>
             Login
@@ -38,6 +45,7 @@ export default class Login extends Component {
           <Input.Group>
             <Input
               id="email"
+              type="text"
               placeholder="email"
               value={email}
               prefix={<Icon type="user" className={styles.icon} />}
@@ -59,6 +67,7 @@ export default class Login extends Component {
             type="primary"
             onClick={this.handleSubmit}
             disabled={!this.isValid()}
+            ref={c => { this.button = c; }}
           >
               Done
           </Button>
@@ -87,8 +96,9 @@ export default class Login extends Component {
     evt.preventDefault();
     if (!this.isValid()) return;
 
-    const { email, password, history } = this.props;
+    const { email, password } = this.props;
+    // TODO: timeout if this takes> 15s
+    await this.button.setState({ loading: true });
     await this.props.loginUser(email, password);
-    history.push("/");
   }
 }
