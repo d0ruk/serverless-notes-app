@@ -1,3 +1,4 @@
+/* eslint react/prop-types: 1 */
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { func, bool } from "prop-types";
@@ -9,11 +10,8 @@ const AuthRoute = ({ component: C, ...rest }, { loggedIn }) => (
       loggedIn ? (
         <C {...props} />
       ) : (
-        <Redirect to={{
-          pathname: "/login",
-          // TODO: implement redirect after Login
-          state: { from: props.location },  // eslint-disable-line
-        }}
+        <Redirect
+          to={`/login?redirect=${props.location.pathname}${props.location.search}`}
         />
       )
     )}
