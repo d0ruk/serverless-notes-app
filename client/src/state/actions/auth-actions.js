@@ -20,3 +20,9 @@ export const setPassword = pwd => ({
   type: types.PASSWORD,
   payload: pwd,
 });
+
+// TODO: action not needed - repurpose loginUser()
+export const setValidUser = cognitoUser => ({
+  type: types.SET_USER,
+  payload: cognitoUser,
+});

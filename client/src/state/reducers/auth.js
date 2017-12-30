@@ -3,6 +3,7 @@ import {
   LOGOUT,
   EMAIL,
   PASSWORD,
+  SET_USER,
 } from "../types";
 
 const initialState = {
@@ -29,10 +30,6 @@ export default function authReducer(state = initialState, { type, payload }) {
       error: payload.message,
       email: state.email,
     };
-  // case `${LOGOUT}_PENDING`:
-  //   return {
-  //     ...state,
-  //   };
   case `${LOGOUT}_FULFILLED`:
     return {
       ...initialState,
@@ -43,6 +40,11 @@ export default function authReducer(state = initialState, { type, payload }) {
       ...initialState,
       error: payload.message,
       email: state.email,
+    };
+  case SET_USER:
+    return {
+      ...state,
+      cognitoUser: payload,
     };
   case EMAIL:
     return { ...state, email: payload };
