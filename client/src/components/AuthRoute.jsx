@@ -1,19 +1,17 @@
+/* eslint react/prop-types: 1 */
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
-import { shape, string, object, bool } from "prop-types";
+import { func, bool } from "prop-types";
 
-const AuthRoute = ({ component: C, location, ...rest }, { loggedIn }) => ( // eslint-disable-line
+const AuthRoute = ({ component: C, ...rest }, { loggedIn }) => (
   <Route
     {...rest}
     render={props => (
       loggedIn ? (
         <C {...props} />
       ) : (
-        <Redirect to={{
-          pathname: "/login",
-          // TODO: implement redirect after Login
-          state: { from: location },
-        }}
+        <Redirect
+          to={`/login?redirect=${props.location.pathname}${props.location.search}`}
         />
       )
     )}
@@ -21,16 +19,11 @@ const AuthRoute = ({ component: C, location, ...rest }, { loggedIn }) => ( // es
 );
 
 AuthRoute.contextTypes = {
-  loggedIn: bool.isRequired, // eslint-disable-line
+  loggedIn: bool.isRequired,
 };
 
 AuthRoute.propTypes = {
-  location: shape({
-    pathname: string.isRequired,
-    search: string.isRequired,
-    hash: string.isRequired,
-    state: object,
-  }).isRequired,
+  component: func.isRequired,
 };
 
 export default AuthRoute;

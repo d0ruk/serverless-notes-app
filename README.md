@@ -18,8 +18,3 @@ Frontend (/client)
 * Backend
   * ```sls invoke local -f create --path event.json```
   * ```sls invoke local -f list --path event.json```
-
-#### TODO
-  * remove magic strings from .yml (via .env?)
-  * separate event.json for each function
-  * describe stack region in an env variable?

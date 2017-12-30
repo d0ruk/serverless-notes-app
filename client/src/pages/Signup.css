@@ -1,0 +1,19 @@
+.column {
+  >button {
+    margin-top: .5rem;
+    margin-left: auto;
+    display:block;
+  }
+
+  input {
+    margin: .3rem 0;
+  }
+}
+
+.icon {
+  color: rgba(0, 0, 0, .25);
+}
+
+.header {
+  text-align: center;
+}

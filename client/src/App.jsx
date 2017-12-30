@@ -3,16 +3,18 @@ import { Layout } from "antd";
 import { Route, Switch, Redirect, withRouter } from "react-router-dom";
 import { bool, func } from "prop-types";
 import { connect } from "react-redux";
+import { Helmet } from "react-helmet";
 
 import styles from "./App.css";
 import NavBar from "./components/NavBar";
 import AuthRoute from "./components/AuthRoute";
+import UnAuthRoute from "./components/UnAuthRoute";
 import NotFound from "./components/NotFound";
 import Footer from "./components/Footer";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-// import SignUp from "./pages/SignUp";
+import Signup from "./pages/Signup";
 
 import { logoutUser } from "./state/actions/auth-actions";
 
@@ -24,7 +26,7 @@ import { logoutUser } from "./state/actions/auth-actions";
 export default class App extends Component {
   static childContextTypes = { loggedIn: bool };
   static propTypes = {
-    loggedIn: bool,
+    loggedIn: bool.isRequired,
     logoutUser: func.isRequired,
   };
 
@@ -37,6 +39,10 @@ export default class App extends Component {
   render() {
     return (
       <Layout className={styles.wrapper}>
+        <Helmet
+          defaultTitle="Scratch"
+          titleTemplate=" %s | Scratch"
+        />
         <Layout.Sider collapsed>
           <NavBar />
         </Layout.Sider>
@@ -44,7 +50,8 @@ export default class App extends Component {
           <Layout.Content className={styles.content}>
             <Switch>
               <AuthRoute path="/" exact component={Home} />
-              <Route path="/login" exact component={Login} />
+              <UnAuthRoute path="/login" exact component={Login} />
+              <UnAuthRoute path="/signup" exact component={Signup} />
               <Route
                 path="/logout"
                 exact
