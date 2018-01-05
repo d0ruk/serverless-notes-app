@@ -10,10 +10,14 @@
   }
 }
 
-.icon {
-  color: rgba(0, 0, 0, .25);
+.verifyForm {
+  button, button[disabled] {
+    margin-top: .3rem;
+    margin-right: auto;
+    display:block;
+  }
 }
 
-.header {
-  text-align: center;
+.signupForm {
+
 }

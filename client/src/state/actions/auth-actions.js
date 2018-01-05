@@ -26,3 +26,24 @@ export const setValidUser = cognitoUser => ({
   type: types.SET_USER,
   payload: cognitoUser,
 });
+
+export const signupUser = (derivedUsername, password, email) => ({
+  type: types.SIGNUP,
+  meta: {
+    dontCatch: true,
+  },
+  payload: Auth.signUp(derivedUsername, password, email),
+});
+
+export const resendSignUp = derivedUsername => ({
+  type: types.RESEND,
+  payload: Auth.resendSignUp(derivedUsername),
+});
+
+export const confirmSignUp = (derivedUsername, code) => ({
+  type: types.VERIFY,
+  meta: {
+    dontCatch: true,
+  },
+  payload: Auth.confirmSignUp(derivedUsername, code),
+});
