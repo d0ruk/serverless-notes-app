@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { Row, Col, Input, Icon, Button } from "antd";
 import { connect } from "react-redux";
-import { func, string, bool } from "prop-types";
+import { func, string } from "prop-types";
 import { Helmet } from "react-helmet";
 
 import styles from "./Login.css";
 import { loginUser, setEmail, setPassword } from "../state/actions/auth-actions";
+import { makeUsername } from "../util";
 
 @connect(
   ({ auth: { email, password, error } }) => ({ email, password, error }),
@@ -45,7 +46,7 @@ export default class Login extends Component {
               type="text"
               placeholder="email"
               value={email}
-              prefix={<Icon type="user" className={styles.icon} />}
+              prefix={<Icon type="user" />}
               ref={c => { this.emailField = c; }}
               onChange={this.handleChange}
               onPressEnter={this.handleSubmit}
@@ -55,7 +56,7 @@ export default class Login extends Component {
               placeholder="password"
               type="password"
               value={password}
-              prefix={<Icon type="lock" className={styles.icon} />}
+              prefix={<Icon type="lock" />}
               onChange={this.handleChange}
               onPressEnter={this.handleSubmit}
             />
@@ -86,8 +87,8 @@ export default class Login extends Component {
 
   isValid = () => {
     const { email, password } = this.props;
-
-    return /\S+@\S+\.\S+/.test(email) && password !== "";
+    // regex to test email pattern is in makeUsername
+    return !!makeUsername(email) && password !== "";
   }
 
   handleSubmit = async evt => {

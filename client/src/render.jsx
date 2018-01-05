@@ -4,13 +4,16 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/es/integration/react";
 import { element } from "prop-types";
-// import { Auth } from "aws-amplify";
 
 import createStore from "./state";
 import { getCurrentUser } from "./util";
 import { setValidUser } from "./state/actions/auth-actions";
 
 const { persistor, store } = createStore();
+
+if (process.env.NODE_ENV !== "production") {
+  window.__APP_STORE__ = store; // eslint-disable-line
+}
 
 class Root extends React.Component {
   static propTypes = {
@@ -21,7 +24,7 @@ class Root extends React.Component {
     const currentUser = await getCurrentUser();
 
     if (currentUser) {
-      await store.dispatch(setValidUser(currentUser));
+      store.dispatch(setValidUser(currentUser));
     }
   }
 

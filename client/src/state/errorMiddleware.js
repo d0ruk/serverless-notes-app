@@ -4,6 +4,10 @@ export default store => next => action => { // eslint-disable-line
     return next(action);
   }
 
+  if (action.meta && action.meta.dontCatch) {
+    return next(action);
+  }
+
   return next(action)
     .catch(error => {
       if (process.env.NODE_ENV === "development") {
