@@ -1,0 +1,26 @@
+Type: AWS::IAM::Role
+Properties:
+  RoleName: ${self:service}-${self:provider.stage}-unauthRole
+  AssumeRolePolicyDocument:
+    Version: "2012-10-17"
+    Statement:
+      - Effect: Allow
+        Principal:
+          Federated: cognito-identity.amazonaws.com
+        Action: sts:AssumeRoleWithWebIdentity
+        Condition:
+          StringEquals:
+            cognito-identity.amazonaws.com:aud:
+              Ref: IdentityPool
+          ForAnyValue:StringLike:
+            cognito-identity.amazonaws.com:amr: unauthenticated
+  Policies:
+    - PolicyName: CognitoUnauthorizedPolicy
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - mobileanalytics:PutEvents
+              - cognito-sync:*
+            Resource: "*"

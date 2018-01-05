@@ -5,3 +5,5 @@ Properties:
   Roles:
     authenticated:
       Fn::GetAtt: [ CognitoAuthorizedRole, Arn ]
+    unauthenticated:
+      Fn::GetAtt: [ CognitoUnAuthorizedRole, Arn ]

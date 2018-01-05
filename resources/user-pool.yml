@@ -1,13 +1,18 @@
 Type: AWS::Cognito::UserPool
 Properties:
   UserPoolName: ${self:custom.userPoolName}
-  # MfaConfiguration: ON
   AliasAttributes:
     - email
   AutoVerifiedAttributes:
     - email
-  EmailVerificationMessage: Onay kodu {####}.
-  EmailVerificationSubject: \[${self:custom.clientName}\] Onay
+  # https://forums.aws.amazon.com/thread.jspa?threadID=259349&tstart=0
+  Schema:
+    - Name: email
+      AttributeDataType: String
+      Mutable: false
+      Required: true
+  EmailVerificationMessage: Verification code {####}.
+  EmailVerificationSubject: ${file(./package.json):name} | Verify
   Policies:
     PasswordPolicy:
       MinimumLength: 8

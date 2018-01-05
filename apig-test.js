@@ -33,22 +33,22 @@ idp.adminInitiateAuth({
   AuthParameters: userDetails // Assuming the initial password is Qwerty12
 }, cb);
 
-function cb(err, { Session }) {
-  if(err) return console.log(err);
+function cb(err, { Session }={}) {
+  if (err) return console.log(`adminInitiateAuth: ${err}`);
 
   const response = {
     ChallengeName: "NEW_PASSWORD_REQUIRED",
     ClientId: output.UserPoolClient,
     ChallengeResponses: {
-      USERNAME: "test",
-      NEW_PASSWORD: "Changed12"
+      ...userDetails,
+      NEW_PASSWORD: "Changed12",
     },
     Session,
-  }
+  };
 
   idp.respondToAuthChallenge(response, function(err, data) {
-    if (err) console.log(err, err.stack);
+    if (err) console.log(`respondToAuthChallenge: ${err}`);
     else     console.log(data);
   });
-};
+}
 */
