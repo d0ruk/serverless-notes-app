@@ -1,13 +1,13 @@
 /* eslint react/prop-types: 1 */
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
-import { func, bool } from "prop-types";
+import { func, object } from "prop-types";
 
-const AuthRoute = ({ component: C, ...rest }, { loggedIn }) => (
+const AuthRoute = ({ component: C, ...rest }, { cognitoUser }) => (
   <Route
     {...rest}
     render={props => (
-      loggedIn ? (
+      cognitoUser ? (
         <C {...props} />
       ) : (
         <Redirect
@@ -19,7 +19,7 @@ const AuthRoute = ({ component: C, ...rest }, { loggedIn }) => (
 );
 
 AuthRoute.contextTypes = {
-  loggedIn: bool.isRequired,
+  cognitoUser: object,
 };
 
 AuthRoute.propTypes = {

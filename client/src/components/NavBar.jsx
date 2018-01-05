@@ -1,7 +1,7 @@
 import React from "react";
 import { Menu, Icon } from "antd";
-import { Link } from "react-router-dom";
-import { bool } from "prop-types";
+import { Link, withRouter } from "react-router-dom";
+import { object } from "prop-types";
 
 function getRoutes(loggedIn) {
   return [
@@ -28,9 +28,9 @@ function getRoutes(loggedIn) {
     }]);
 }
 
-const NavBar = (_, { loggedIn }) => (
-  <Menu theme="dark" mode="vertical">
-    {getRoutes(loggedIn).map(({ name, iconType, href }) => (
+const NavBar = (_, { cognitoUser }) => (
+  <Menu theme="dark">
+    {getRoutes(Boolean(cognitoUser)).map(({ name, iconType, href }) => (
       <Menu.Item key={name}>
         <Icon type={iconType} />
         <Link to={href}>{name}</Link>
@@ -40,7 +40,8 @@ const NavBar = (_, { loggedIn }) => (
 );
 
 NavBar.contextTypes = {
-  loggedIn: bool,
+  cognitoUser: object,
 };
 
-export default NavBar;
+// TODO: either sync the router state with the menu state or use a different component
+export default withRouter(NavBar);

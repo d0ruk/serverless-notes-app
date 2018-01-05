@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Layout } from "antd";
 import { Route, Switch, Redirect, withRouter } from "react-router-dom";
-import { bool, func } from "prop-types";
+import { object, func } from "prop-types";
 import { connect } from "react-redux";
 import { Helmet } from "react-helmet";
 
@@ -20,19 +20,19 @@ import { logoutUser } from "./state/actions/auth-actions";
 
 @withRouter
 @connect(
-  ({ auth }) => ({ loggedIn: Boolean(auth.cognitoUser) }),
+  ({ auth }) => ({ cognitoUser: auth.cognitoUser }),
   { logoutUser },
 )
 export default class App extends Component {
-  static childContextTypes = { loggedIn: bool };
+  static childContextTypes = { cognitoUser: object };
   static propTypes = {
-    loggedIn: bool.isRequired,
+    cognitoUser: object, // TODO: shapeOf
     logoutUser: func.isRequired,
   };
 
   getChildContext() {
     return {
-      loggedIn: this.props.loggedIn,
+      cognitoUser: this.props.cognitoUser,
     };
   }
 
@@ -41,7 +41,7 @@ export default class App extends Component {
       <Layout className={styles.wrapper}>
         <Helmet
           defaultTitle="Scratch"
-          titleTemplate=" %s | Scratch"
+          titleTemplate="Scratch | %s"
         />
         <Layout.Sider collapsed>
           <NavBar />
@@ -56,7 +56,7 @@ export default class App extends Component {
                 path="/logout"
                 exact
                 render={() => {
-                  if (this.props.loggedIn) {
+                  if (this.props.cognitoUser) {
                     this.props.logoutUser();
                   }
 
