@@ -1,3 +1,4 @@
+/* eslint-disable */
 const autoprefixer = require("autoprefixer");
 const path = require("path");
 const webpack = require("webpack");
@@ -143,6 +144,7 @@ module.exports = {
                       options: {
                         ident: "postcss",
                         plugins: () => [
+                          require("postcss-import-url")({ modernBrowser: true }),
                           require("postcss-nested"),
                           require("postcss-flexbugs-fixes"),
                           autoprefixer({

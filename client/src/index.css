@@ -1,9 +1,5 @@
 @import "sanitize.css";
-
-:global .error {
-  padding-left: 1em;
-  background: linear-gradient(90deg, #FF0000 .7em,rgba(0,0,0,0) 0);
-}
+@import "https://fonts.googleapis.com/css?family=Changa";
 
 :global .ant-input-group .anticon {
   color: rgba(0, 0, 0, .25);
