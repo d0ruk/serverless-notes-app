@@ -12,12 +12,12 @@ export const logoutUser = () => ({
 });
 
 export const setEmail = email => ({
-  type: types.EMAIL,
+  type: types.SET_EMAIL,
   payload: email,
 });
 
 export const setPassword = pwd => ({
-  type: types.PASSWORD,
+  type: types.SET_PASSWORD,
   payload: pwd,
 });
 

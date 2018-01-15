@@ -1,9 +1,15 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
-import { func, string } from "prop-types";
+import { func, string, shape, number } from "prop-types";
 import { Helmet } from "react-helmet";
-import { Row, Col, Input, Icon, Button, Tooltip, Tabs } from "antd";
+import {
+  Row, Col,
+  Input, Icon,
+  Button, Tooltip,
+  Tabs, notification,
+} from "antd";
 import { history as historyProps } from "react-router-prop-types";
+import debug from "debug";
 
 import styles from "./Signup.css";
 import {
@@ -13,9 +19,10 @@ import {
 } from "../state/actions/auth-actions";
 import { makeUsername } from "../util";
 
+const isProd = process.env.NODE_ENV === "production";
+
 @connect(
-  ({ auth: { email, password, error } }) =>
-    ({ email, password, error }),
+  ({ auth: { email, password, error } }) => ({ email, password, error }),
   { signupUser, resendSignUp, setEmail, confirmSignUp, setPassword, loginUser },
 )
 export default class SignUp extends Component {
@@ -28,7 +35,10 @@ export default class SignUp extends Component {
     resendSignUp: func.isRequired,
     email: string,
     password: string,
-    error: string,
+    error: shape({
+      msg: string,
+      timestamp: number,
+    }),
     history: historyProps,
   }
 
@@ -37,54 +47,64 @@ export default class SignUp extends Component {
     tempUser: null,
   }
 
+  debug = debug("signup")
+
   componentDidMount() {
     this.emailField.focus();
   }
 
-  componentWillUpdate() {
+  componentWillUpdate = nProps => {
     const { verifyField, confirmField } = this;
+    const { error } = this.props;
+    const { error: { msg, timestamp } } = nProps;
+
     if (verifyField) verifyField.input.value = "";
     if (confirmField) confirmField.input.value = "";
+
+    if (msg && error.timestamp !== timestamp) {
+      notification.error({ message: msg });
+
+      !isProd && this.debug(msg); // eslint-disable-line
+    }
   }
 
   render() {
     const { activeTab } = this.state;
 
     return (
-      <Fragment>
+      <Row>
         <Helmet>
           <title>Sign Up</title>
         </Helmet>
-        <Row>
-          <Col xs={24} md={12} lg={6} className={styles.column}>
-            <Tabs
-              activeKey={activeTab}
-              onChange={this.handleTabChange}
+        <Col xs={24} md={8} xl={4} className={styles.column}>
+          <Tabs
+            activeKey={activeTab}
+            onChange={this.handleTabChange}
+          >
+            <Tabs.TabPane
+              tab="Sign Up"
+              key="signup"
             >
-              <Tabs.TabPane
-                tab="Sign Up"
-                key="signup"
-              >
-                {this.renderSignupForm()}
-              </Tabs.TabPane>
-              <Tabs.TabPane
-                tab="Verify"
-                key="verify"
-              >
-                {this.renderVerifyForm()}
-              </Tabs.TabPane>
-            </Tabs>
-            <Button
-              type="primary"
-              onClick={this.handleSubmit}
-              disabled={!this.isValid()}
-              ref={c => { this.button = c; }}
+              {this.renderSignupForm()}
+            </Tabs.TabPane>
+            <Tabs.TabPane
+              className={styles.verifyForm}
+              tab="Verify"
+              key="verify"
             >
-                Done
-            </Button>
-          </Col>
-        </Row>
-      </Fragment>
+              {this.renderVerifyForm()}
+            </Tabs.TabPane>
+          </Tabs>
+          <Button
+            type="primary"
+            onClick={this.handleSubmit}
+            disabled={!this.isValid()}
+            ref={c => { this.button = c; }}
+          >
+              Done
+          </Button>
+        </Col>
+      </Row>
     );
   }
 
@@ -93,11 +113,10 @@ export default class SignUp extends Component {
   }
 
   renderVerifyForm = () => {
-    const { email, error } = this.props;
+    const { email } = this.props;
 
     return (
-      <Row className={styles.verifyForm}>
-        {error && <div className="error">{error}</div>}
+      <Fragment>
         <Input.Group>
           <Input
             id="email"
@@ -126,54 +145,51 @@ export default class SignUp extends Component {
             ref={c => { this.reSendbutton = c; }}
           />
         </Tooltip>
-      </Row>
+      </Fragment>
     );
   }
 
   renderSignupForm = () => {
-    const { email, password, error } = this.props;
+    const { email, password } = this.props;
 
     return (
-      <Row className={styles.signupForm}>
-        {error && <div className="error">{error}</div>}
-        <Input.Group>
-          <Input
-            id="email"
-            type="text"
-            placeholder="email"
-            value={email}
-            prefix={<Icon type="user" />}
-            ref={c => { this.emailField = c; }}
-            onChange={this.handleChange}
-            onPressEnter={this.handleSubmit}
-          />
-          <Input
-            id="password"
-            placeholder="pick a password"
-            defaultValue=""
-            type="password"
-            value={password}
-            prefix={<Icon type="lock" />}
-            suffix={
-              <Tooltip
-                placement="right"
-                title={() => <span>min. 8 characters<br />at least 1 numeric, 1 caps</span>}
-              >
-                <Icon type="info-circle-o" />
-              </Tooltip>}
-            ref={c => { this.passwordField = c; }}
-            onChange={this.handleChange}
-            onPressEnter={this.handleSubmit}
-          />
-          <Input
-            placeholder="confirm password"
-            type="password"
-            prefix={<Icon type="lock" />}
-            ref={c => { this.confirmField = c; }}
-            onPressEnter={this.handleSubmit}
-          />
-        </Input.Group>
-      </Row>
+      <Input.Group>
+        <Input
+          id="email"
+          type="text"
+          placeholder="email"
+          value={email}
+          prefix={<Icon type="user" />}
+          ref={c => { this.emailField = c; }}
+          onChange={this.handleChange}
+          onPressEnter={this.handleSubmit}
+        />
+        <Input
+          id="password"
+          placeholder="pick a password"
+          defaultValue=""
+          type="password"
+          value={password}
+          prefix={<Icon type="lock" />}
+          suffix={
+            <Tooltip
+              placement="right"
+              title={() => <span>min. 8 characters<br />at least 1 numeric, 1 caps</span>}
+            >
+              <Icon type="info-circle-o" />
+            </Tooltip>}
+          ref={c => { this.passwordField = c; }}
+          onChange={this.handleChange}
+          onPressEnter={this.handleSubmit}
+        />
+        <Input
+          placeholder="confirm password"
+          type="password"
+          prefix={<Icon type="lock" />}
+          ref={c => { this.confirmField = c; }}
+          onPressEnter={this.handleSubmit}
+        />
+      </Input.Group>
     );
   }
 
@@ -270,9 +286,9 @@ export default class SignUp extends Component {
     // we need the same derived username for resend
     const derivedUsername = makeUsername(email);
 
-    await this.reSendbutton.setState({ loading: true });
+    this.reSendbutton.setState({ loading: true });
     await this.props.resendSignUp(derivedUsername);
-    await this.reSendbutton.setState({ loading: false });
+    this.reSendbutton.setState({ loading: false });
   }
 
   handleChange = evt => {

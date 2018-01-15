@@ -1,4 +1,4 @@
-.column {
+.loginForm {
   >button {
     margin-top: .5rem;
     margin-left: auto;
@@ -8,8 +8,4 @@
   input {
     margin: .3rem 0;
   }
-}
-
-.header {
-  text-align: center;
 }
