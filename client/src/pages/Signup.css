@@ -11,13 +11,9 @@
 }
 
 .verifyForm {
-  button, button[disabled] {
-    margin-top: .3rem;
+  >button, button[disabled] {
+    margin-top: .2rem;
     margin-right: auto;
     display:block;
   }
-}
-
-.signupForm {
-
 }

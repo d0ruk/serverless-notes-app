@@ -1,8 +1,8 @@
 import {
   LOGIN,
   LOGOUT,
-  EMAIL,
-  PASSWORD,
+  SET_EMAIL,
+  SET_PASSWORD,
   SET_USER,
   SIGNUP,
   VERIFY,
@@ -13,7 +13,10 @@ const initialState = {
   email: "",
   password: "",
   cognitoUser: null,
-  error: "",
+  error: {
+    msg: "",
+    timestamp: null,
+  },
 };
 
 export default function authReducer(state = initialState, { type, payload }) {
@@ -29,12 +32,15 @@ export default function authReducer(state = initialState, { type, payload }) {
   case `${SIGNUP}_REJECTED`:
     return {
       ...initialState,
-      error: payload.message,
+      error: {
+        msg: payload.message,
+        timestamp: Date.now(),
+      },
       email: state.email,
     };
   case `${LOGOUT}_FULFILLED`:
-  case `${VERIFY}_FULFILLED`:
-  case `${RESEND}_FULFILLED`:
+  // case `${VERIFY}_FULFILLED`:
+  // case `${RESEND}_FULFILLED`:
     return {
       ...initialState,
       email: state.email,
@@ -44,14 +50,17 @@ export default function authReducer(state = initialState, { type, payload }) {
   case `${LOGOUT}_REJECTED`:
     return {
       ...state,
-      error: payload.message,
+      error: {
+        msg: payload.message,
+        timestamp: Date.now(),
+      },
     };
-  case EMAIL:
+  case SET_EMAIL:
     return {
       ...state,
       email: payload,
     };
-  case PASSWORD:
+  case SET_PASSWORD:
     return {
       ...state,
       password: payload,
