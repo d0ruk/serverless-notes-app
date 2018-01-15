@@ -9,9 +9,11 @@ import createStore from "./state";
 import { getCurrentUser } from "./util";
 import { setValidUser } from "./state/actions/auth-actions";
 
+// TODO: remove persist
 const { persistor, store } = createStore();
+const isProd = process.env.NODE_ENV === "production";
 
-if (process.env.NODE_ENV !== "production") {
+if (!isProd) {
   window.__APP_STORE__ = store; // eslint-disable-line
 }
 
@@ -31,11 +33,7 @@ class Root extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <PersistGate
-          // loading={<Loading />}
-          // onBeforeLift={onBeforeLift}
-          persistor={persistor}
-        >
+        <PersistGate persistor={persistor}>
           <Router>
             {this.props.children}
           </Router>

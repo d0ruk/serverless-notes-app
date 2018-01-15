@@ -13,6 +13,21 @@ Amplify.configure({
     userPoolId: StackOutput.UserPool,
     userPoolWebClientId: StackOutput.UserPoolClient,
   },
+  Storage: {
+    bucket: StackOutput.AttachmentsBucket,
+    region: StackOutput.Region,
+    identityPoolId: StackOutput.IdentityPool,
+    // track: true,
+    level: "private",
+  },
+  API: {
+    endpoints: [
+      {
+        name: "notes",
+        endpoint: StackOutput.ServiceEndpoint,
+      },
+    ]
+  }
 });
 
 // TODO: enable service workers after out the caching hell
@@ -23,6 +38,6 @@ render(App);
 if (module.hot && process.env.NODE_ENV !== "production") {
   module.hot.accept("./App.jsx", () => {
     const NewApp = require("./App.jsx").default;
-		render(NewApp);
+    render(NewApp);
   });
 }
