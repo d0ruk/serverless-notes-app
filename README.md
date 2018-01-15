@@ -15,9 +15,9 @@ Frontend (CRA app in /client)
 
 ### Offline
 
-Backend
   * ```sls invoke local -f create --path event.json```
   * ```sls invoke local -f list --path event.json```
+  * ```sls deploy function -f delete```
 
 ### Notes
 
