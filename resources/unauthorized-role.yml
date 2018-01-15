@@ -1,6 +1,6 @@
 Type: AWS::IAM::Role
 Properties:
-  RoleName: ${self:service}-${self:provider.stage}-unauthRole
+  RoleName: ${self:custom.prefix}-unauthRole
   AssumeRolePolicyDocument:
     Version: "2012-10-17"
     Statement:

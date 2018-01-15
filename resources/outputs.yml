@@ -12,3 +12,6 @@ UserPoolClient:
 IdentityPool:
   Value:
     Ref: IdentityPool
+AttachmentsBucket:
+  Value:
+    Ref: AttachmentsBucket

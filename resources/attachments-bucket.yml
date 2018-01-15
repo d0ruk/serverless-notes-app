@@ -1,0 +1,20 @@
+Type: AWS::S3::Bucket
+Properties: 
+  BucketName: ${self:custom.bucketName}
+  CorsConfiguration:
+    CorsRules:
+    - AllowedHeaders:
+      - "*"
+      AllowedOrigins:
+      - "*"
+      AllowedMethods:
+      - HEAD
+      - GET
+      - PUT
+      - POST
+      - DELETE
+      ExposedHeaders:
+      - x-amz-server-side-encryption
+      - x-amz-request-id
+      - x-amz-id-2
+      MaxAge: 3000
