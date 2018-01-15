@@ -1,9 +1,10 @@
 // redux-promise-middleware doesn't catch the async errors thrown within
-export default store => next => action => { // eslint-disable-line
+export default store => next => action => {
   if (!isPromise(action.payload)) {
     return next(action);
   }
 
+  // we want the UI to handle catch'ing the action
   if (action.meta && action.meta.dontCatch) {
     return next(action);
   }
