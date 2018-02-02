@@ -16,9 +16,8 @@ export default async function main(evt, ctx, cb) {
     Item: {
       userId: evt.requestContext.identity.cognitoIdentityId,
       noteId: uuid.v1(),
-      content: data.content,
-      attachment: data.attachment,
-      createdAt: new Date().getTime()
+      createdAt: new Date().getTime(),
+      ...data
     }
   }
 

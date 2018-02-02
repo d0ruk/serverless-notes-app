@@ -1,5 +1,5 @@
 // redux-promise-middleware doesn't catch the async errors thrown within
-export default store => next => action => {
+export default store => next => action => { // eslint-disable-line
   if (!isPromise(action.payload)) {
     return next(action);
   }

@@ -49,6 +49,6 @@ export const getNote = noteId => ({
 });
 
 export const getNotes = () => ({
-  type: types.GET_NOTES,
+  type: types.LIST_NOTES,
   payload: API.get("notes", "/notes"),
 });

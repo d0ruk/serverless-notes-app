@@ -13,4 +13,9 @@
     resize: none;
     overflow-y: auto;
   }
+
+}
+
+.selectBox {
+  width: 7rem;
 }
