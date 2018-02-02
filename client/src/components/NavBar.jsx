@@ -66,7 +66,9 @@ export default withRouter(NavBar);
 
 
 /* eslint-disable */
-function renderSettings({ handleAdd, handleDebug, debugEnabled }) {
+function renderSettings({
+  handleAdd, handleDebug, debugEnabled
+}) {
   return (
     <Menu.SubMenu
       key="setting"

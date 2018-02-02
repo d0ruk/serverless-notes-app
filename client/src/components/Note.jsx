@@ -5,7 +5,7 @@ import { string, func } from "prop-types";
 
 import styles from "./Note.css";
 
-const Note = ({ noteId, content, attachment, onDelete, onDownload }) => {
+const Note = ({ noteId, content, attachment, color, onDelete, onDownload }) => {
   const actions = [
     <Icon type="delete" data-id={noteId} onClick={onDelete} />,
   ];
@@ -31,6 +31,7 @@ const Note = ({ noteId, content, attachment, onDelete, onDownload }) => {
       className={styles.column}
     >
       <Card
+        style={color ? { background: color } : {}}
         hoverable
         actions={actions}
         className={styles.card}
@@ -44,7 +45,8 @@ const Note = ({ noteId, content, attachment, onDelete, onDownload }) => {
 Note.propTypes = {
   noteId: string.isRequired,
   content: string.isRequired,
-  attachment: string.isRequired,
+  attachment: string,
+  color: string,
   onDelete: func.isRequired,
   onDownload: func.isRequired,
 };

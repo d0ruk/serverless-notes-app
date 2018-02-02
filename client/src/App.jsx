@@ -5,7 +5,6 @@ import { object, func } from "prop-types";
 import { connect } from "react-redux";
 import { Helmet } from "react-helmet";
 import range from "lodash/range";
-import randSentence from "random-sentence";
 import debug from "debug";
 
 import styles from "./App.css";
@@ -22,6 +21,7 @@ import NewNote from "./pages/NewNote";
 
 import { logoutUser } from "./state/actions/auth-actions";
 import { createNote } from "./state/actions/notes-actions";
+import { makeRandomNote } from "./util";
 
 @withRouter
 @connect(
@@ -31,7 +31,7 @@ import { createNote } from "./state/actions/notes-actions";
 export default class App extends Component {
   static childContextTypes = { cognitoUser: object };
   static propTypes = {
-    cognitoUser: object, // TODO: shapeOf
+    cognitoUser: object, // TODO: shape
     logoutUser: func.isRequired,
     createNote: func.isRequired,
   };
@@ -81,7 +81,7 @@ export default class App extends Component {
                     this.props.logoutUser();
                   }
                   // TODO: BUG: redirects to / while action in progress
-                  // thus GET_NOTES is dispatched without a user in state
+                  // thus LIST_NOTES is dispatched without a user in state
                   return <Redirect to="/login" />;
                 }}
               />
@@ -106,8 +106,8 @@ export default class App extends Component {
 
     range(amount)
       .reduce(acc => acc.then(() => {
-        const content = randSentence({ min: 4, max: 42 });
-        return this.props.createNote({ content });
+        const note = makeRandomNote();
+        return this.props.createNote(note);
       }), Promise.resolve())
       .catch(console.error) // eslint-disable-line
       .finally(() => {

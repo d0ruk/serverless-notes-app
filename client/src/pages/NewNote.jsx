@@ -2,7 +2,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Helmet } from "react-helmet";
 import { func, string, shape, number } from "prop-types";
-import { Row, Col, Input, Button, Tooltip, Spin, notification } from "antd";
+import {
+  Row, Col,
+  Input, Button,
+  Tooltip, Spin,
+  notification, Select,
+} from "antd";
 import { history as historyProps } from "react-router-prop-types";
 import debounce from "lodash/debounce";
 import FileReaderInput from "react-file-reader-input";
@@ -10,6 +15,7 @@ import debug from "debug";
 
 import styles from "./NewNote.css";
 import { setContent, putFile, createNote } from "../state/actions/notes-actions";
+import { noteColors } from "../util";
 
 const MAX_ATTACHMENT_SIZE = 5000000;
 const isProd = process.env.NODE_ENV === "production";
@@ -43,6 +49,7 @@ export default class NewNote extends Component {
   }
 
   debug = debug("new-note")
+  selectedColor = null
 
   componentDidMount() {
     this.textArea.focus();
@@ -101,6 +108,24 @@ export default class NewNote extends Component {
                 disabled={!File || !this.isValid()}
               />
             </Tooltip>
+            <Select
+              placeholder="color"
+              allowClear
+              className={styles.selectBox}
+              disabled={!this.isValid()}
+              onChange={val => { this.selectedColor = val; }}
+              ref={c => { this.selectBox = c; }}
+            >
+              {noteColors.map(({ name, rgb }) => (
+                <Select.Option
+                  style={{ background: rgb }}
+                  value={rgb}
+                  key={name}
+                >
+                  {name}
+                </Select.Option>
+              ))}
+            </Select>
             <Button
               type="primary"
               onClick={this.handleSubmit}
@@ -139,7 +164,7 @@ export default class NewNote extends Component {
   }
 
   handleFileChange = (event, [data]) => {
-    const [_, File] = data;
+    const [_, File] = data; // eslint-disable-line
 
     if (File.size <= MAX_ATTACHMENT_SIZE) {
       this.setState({ File });
@@ -156,9 +181,12 @@ export default class NewNote extends Component {
 
     const { File } = this.state;
     const { content } = this.props;
-
     this.button.setState({ loading: true });
+
     const newNote = { content };
+    if (this.selectedColor) {
+      newNote.color = this.selectedColor;
+    }
 
     if (File) {
       this.setState({ uploading: true });
