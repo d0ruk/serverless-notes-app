@@ -19,6 +19,7 @@
   "license": "MIT",
   "devDependencies": {
     "aws-api-gateway-cli-test": "^1.2.0",
+    "aws-sdk": "^2.176.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.1.0",
     "babel-loader": "^7.1.2",
@@ -32,7 +33,6 @@
     "webpack-node-externals": "^1.6.0"
   },
   "dependencies": {
-    "aws-sdk": "^2.176.0",
     "uuid": "^3.1.0"
   }
 }

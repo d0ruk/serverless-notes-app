@@ -87,7 +87,9 @@ plugins:
   - serverless-s3-remover
 
 custom:
-  webpackIncludeModules: true
+  webpackIncludeModules:
+    forceExclude:
+      - aws-sdk
   prefix: ${self:service}-${self:provider.stage}-${self:provider.region}
   tableName: ${self:custom.prefix}-table
   bucketName: ${self:custom.prefix}-bucket
