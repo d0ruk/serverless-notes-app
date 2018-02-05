@@ -4,13 +4,10 @@ import { connect } from "react-redux";
 import { func, string, number, shape } from "prop-types";
 import { Helmet } from "react-helmet";
 import { history as historyProps } from "react-router-prop-types";
-import debug from "debug";
 
 import styles from "./Login.css";
 import { loginUser, setEmail, setPassword } from "../state/actions/auth-actions";
 import { makeUsername } from "../util";
-
-const isProd = process.env.NODE_ENV === "production";
 
 @connect(
   ({ auth: { email, password, error } }) => ({ email, password, error }),
@@ -30,8 +27,6 @@ export default class Login extends Component {
     history: historyProps,
   }
 
-  debug = debug("login")
-
   componentDidMount() {
     this.emailField.focus();
   }
@@ -42,8 +37,6 @@ export default class Login extends Component {
 
     if (msg && error.timestamp !== timestamp) {
       notification.error({ message: msg });
-
-      !isProd && this.debug(msg); // eslint-disable-line
 
       if (/User does not exist/.test(msg)) {
         await new Promise(res => setTimeout(res, 1000));

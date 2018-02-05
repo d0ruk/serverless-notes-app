@@ -1,8 +1,18 @@
 import { Auth } from "aws-amplify";
 import randSentence from "random-sentence";
 import random from "lodash/random";
+import { number, string, shape } from "prop-types";
 
 const isProd = process.env.NODE_ENV === "production";
+
+export const noteShape = shape({
+  noteId: string.isRequired,
+  content: string.isRequired,
+  attachment: string,
+  color: string,
+  userId: string.isRequired,
+  createdAt: number.isRequired,
+});
 
 export const noteColors = [{
   name: "azure",

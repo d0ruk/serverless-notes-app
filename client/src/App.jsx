@@ -5,7 +5,6 @@ import { object, func } from "prop-types";
 import { connect } from "react-redux";
 import { Helmet } from "react-helmet";
 import range from "lodash/range";
-import debug from "debug";
 
 import styles from "./App.css";
 import NavBar from "./components/NavBar";
@@ -62,8 +61,6 @@ export default class App extends Component {
         <Layout.Sider collapsed>
           <NavBar
             handleAdd={this.handleAdd}
-            handleDebug={this.handleDebug}
-            debugEnabled={Boolean(window.localStorage.getItem("debug"))}
           />
         </Layout.Sider>
         <Layout>
@@ -113,15 +110,5 @@ export default class App extends Component {
       .finally(() => {
         notification.close("add-notes");
       });
-  }
-
-  handleDebug = evt => {
-    const { checked } = evt.target;
-
-    if (checked) {
-      debug.enable("*,-sockjs*");
-    } else {
-      debug.disable();
-    }
   }
 }

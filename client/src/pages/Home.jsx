@@ -4,13 +4,10 @@ import { connect } from "react-redux";
 import { Helmet } from "react-helmet";
 import { number, func, string, shape, arrayOf } from "prop-types";
 import { Row, notification } from "antd";
-import debug from "debug";
 
 import Note from "../components/Note";
 import { getFile, getNotes, deleteNote } from "../state/actions/notes-actions";
-import { downloadFromUrl } from "../util";
-
-const isProd = process.env.NODE_ENV === "production";
+import { noteShape, downloadFromUrl } from "../util";
 
 @connect(
   ({ notes }) => ({ notes: notes.all, error: notes.error }),
@@ -18,13 +15,7 @@ const isProd = process.env.NODE_ENV === "production";
 )
 export default class Home extends Component {
   static propTypes = {
-    notes: arrayOf(shape({
-      noteId: string.isRequired,
-      content: string.isRequired,
-      attachment: string,
-      userId: string.isRequired,
-      createdAt: number.isRequired,
-    })),
+    notes: arrayOf(noteShape),
     error: shape({
       msg: string,
       timestamp: number,
@@ -33,8 +24,6 @@ export default class Home extends Component {
     deleteNote: func.isRequired,
     getFile: func.isRequired,
   }
-
-  debug = debug("home")
 
   componentWillMount = async () => {
     await this.props.getNotes();
@@ -46,8 +35,6 @@ export default class Home extends Component {
 
     if (msg && error.timestamp !== timestamp) {
       notification.error({ message: msg });
-
-      !isProd && this.debug(msg); // eslint-disable-line
     }
   }
 
@@ -68,14 +55,14 @@ export default class Home extends Component {
 
   renderNotes = notes => (
     <Fragment>
-      {notes.map(n => {
-        const AugmentedNote = Object.assign({}, n, {
-          onDelete: this.handleDelete,
-          onDownload: this.handleDownload,
-        });
-
-        return Note(AugmentedNote);
-      })}
+      {notes.map(note => (
+        <Note
+          key={note.noteId}
+          {...note}
+          onDelete={this.handleDelete}
+          onDownload={this.handleDownload}
+        />
+      ))}
     </Fragment>
   )
 

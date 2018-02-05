@@ -9,7 +9,6 @@ import {
   Tabs, notification,
 } from "antd";
 import { history as historyProps } from "react-router-prop-types";
-import debug from "debug";
 
 import styles from "./Signup.css";
 import {
@@ -18,8 +17,6 @@ import {
   confirmSignUp, loginUser,
 } from "../state/actions/auth-actions";
 import { makeUsername } from "../util";
-
-const isProd = process.env.NODE_ENV === "production";
 
 @connect(
   ({ auth: { email, password, error } }) => ({ email, password, error }),
@@ -47,8 +44,6 @@ export default class SignUp extends Component {
     tempUser: null,
   }
 
-  debug = debug("signup")
-
   componentDidMount() {
     this.emailField.focus();
   }
@@ -63,8 +58,6 @@ export default class SignUp extends Component {
 
     if (msg && error.timestamp !== timestamp) {
       notification.error({ message: msg });
-
-      !isProd && this.debug(msg); // eslint-disable-line
     }
   }
 

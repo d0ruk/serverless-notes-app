@@ -11,14 +11,12 @@ import {
 import { history as historyProps } from "react-router-prop-types";
 import debounce from "lodash/debounce";
 import FileReaderInput from "react-file-reader-input";
-import debug from "debug";
 
 import styles from "./NewNote.css";
 import { setContent, putFile, createNote } from "../state/actions/notes-actions";
 import { noteColors } from "../util";
 
 const MAX_ATTACHMENT_SIZE = 5000000;
-const isProd = process.env.NODE_ENV === "production";
 
 @connect(
   ({ notes }) => ({ content: notes.content, error: notes.error }),
@@ -48,7 +46,6 @@ export default class NewNote extends Component {
     };
   }
 
-  debug = debug("new-note")
   selectedColor = null
 
   componentDidMount() {
@@ -61,8 +58,6 @@ export default class NewNote extends Component {
 
     if (msg && error.timestamp !== timestamp) {
       notification.error({ message: msg });
-
-      !isProd && this.debug(msg); // eslint-disable-line
     }
   }
 

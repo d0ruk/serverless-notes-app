@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu, Icon, Checkbox } from "antd";
+import { Menu, Icon } from "antd";
 import { Link, withRouter } from "react-router-dom";
 import { object, func } from "prop-types";
 import { location as locationProps } from "react-router-prop-types";
@@ -66,9 +66,7 @@ export default withRouter(NavBar);
 
 
 /* eslint-disable */
-function renderSettings({
-  handleAdd, handleDebug, debugEnabled
-}) {
+function renderSettings({ handleAdd }) {
   return (
     <Menu.SubMenu
       key="setting"
@@ -84,15 +82,6 @@ function renderSettings({
           </Button>
         </Menu.Item>
       ))}
-      <Menu.Item>
-        <Checkbox
-          defaultChecked={debugEnabled}
-          onChange={handleDebug}
-          style={{ color: "lightgray" }}
-        >
-          debug
-        </Checkbox>
-      </Menu.Item>
     </Menu.SubMenu>
   );
 }
