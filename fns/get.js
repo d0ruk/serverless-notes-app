@@ -1,13 +1,16 @@
+import middy from "middy"
+import { cors } from "middy/middlewares"
 import { success, failure, callDb } from "../util.js"
 
 const TableName = process.env.TABLE_NAME;
 
-export default async function main(evt, ctx, cb) {
+const handler = middy(getNote).use(cors());
+
+export default handler;
+
+async function getNote(evt, ctx) {
   const params = {
     TableName,
-    // 'Key' defines the partition key and sort key of the item to be retrieved
-    // - 'userId': Identity Pool identity id of the authenticated user
-    // - 'noteId': path parameter
     Key: {
       userId: evt.requestContext.identity.cognitoIdentityId,
       noteId: evt.pathParameters.id
@@ -18,11 +21,11 @@ export default async function main(evt, ctx, cb) {
     const result = await callDb("get", params);
 
     if (result.Item) {
-      cb(null, success(result.Item));
+      return success(result.Item);
     } else {
-      cb(null, failure({ error: "Item not found." }));
+      return failure({ error: "No such note." });
     }
   } catch (err) {
-    cb(null, failure({ error: err.message }));
+    return failure({ error: err.message });
   }
 }

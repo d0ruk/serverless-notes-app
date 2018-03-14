@@ -9,10 +9,6 @@ const allowedDbMethods = [
   "put", "update",
   "scan", "query",
 ];
-const defaultHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Credentials": true
-}
 
 export const success = (body, code=200) => buildResponse(code, body);
 export const failure = (body, code=500) => buildResponse(code, body);
@@ -31,7 +27,6 @@ function buildResponse(statusCode, body, headers={}) {
   return {
     statusCode,
     headers: {
-      ...defaultHeaders,
       ...headers
     },
     body: JSON.stringify(body)

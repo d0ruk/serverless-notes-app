@@ -1,8 +1,14 @@
+import middy from "middy"
+import { cors } from "middy/middlewares"
 import { success, failure, callDb } from "../util.js"
 
 const TableName = process.env.TABLE_NAME;
 
-export default async function main(evt, ctx, cb) {
+const handler = middy(deleteNote).use(cors());
+
+export default handler;
+
+async function deleteNote(evt, ctx, cb) {
   const params = {
     TableName,
     Key: {
@@ -13,8 +19,8 @@ export default async function main(evt, ctx, cb) {
 
   try {
     const result = await callDb("delete", params);
-    cb(null, success(result));
+    return success(result);
   } catch(err) {
-    cb(null, failure({ error: err.message }));
+    return failure({ error: err.message });
   }
 }

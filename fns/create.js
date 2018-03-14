@@ -1,30 +1,32 @@
 import uuid from "uuid"
-import { success, failure, callDb } from "../util.js";
+import middy from "middy"
+import { cors, jsonBodyParser, httpHeaderNormalizer } from "middy/middlewares"
+import { success, failure, callDb } from "../util.js"
 
 const TableName = process.env.TABLE_NAME;
 
-export default async function main(evt, ctx, cb) {
-  let data;
-  try {
-    data = JSON.parse(evt.body);
-  } catch(err) {
-    return cb(null, failure({ error: err.message }));
-  }
+const handler = middy(createNote)
+  .use(httpHeaderNormalizer())
+  .use(jsonBodyParser())
+  .use(cors());
 
+export default handler;
+
+async function createNote(evt, ctx) {
   const params = {
     TableName,
     Item: {
       userId: evt.requestContext.identity.cognitoIdentityId,
       noteId: uuid.v1(),
       createdAt: new Date().getTime(),
-      ...data
+      ...evt.body
     }
   }
 
   try {
     await callDb("put", params);
-    cb(null, success(params.Item));
+    return success(params.Item);
   } catch(err) {
-    cb(null, failure({ error: err.message }));
+    return failure({ error: err.message });
   }
 }

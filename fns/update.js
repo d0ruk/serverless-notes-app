@@ -1,15 +1,18 @@
+import middy from "middy"
+import { cors, jsonBodyParser, httpHeaderNormalizer } from "middy/middlewares"
 import { success, failure, callDb } from "../util.js"
 
 const TableName = process.env.TABLE_NAME;
 
-export default async function main(evt, ctx, cb) {
-  let data;
-  try {
-    data = JSON.parse(evt.body)
-  } catch(err) {
-    return cb(null, failure({ error: err.message }));
-  }
+const handler = middy(updateNote)
+  .use(httpHeaderNormalizer())
+  .use(jsonBodyParser())
+  .use(cors());
 
+export default handler;
+
+async function updateNote(evt, ctx, cb) {
+  const data = evt.body;
   const params = {
     TableName,
     Key: {
@@ -26,8 +29,8 @@ export default async function main(evt, ctx, cb) {
 
   try {
     const result = await callDb("update", params);
-    cb(null, success(result));
+    return success(result);
   } catch(err) {
-    cb(null, failure({ error: err.message }));
+    return failure({ error: err.message });
   }
 }

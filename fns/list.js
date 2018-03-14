@@ -1,8 +1,14 @@
+import middy from "middy"
+import { cors } from "middy/middlewares"
 import { success, failure, callDb } from "../util.js"
 
 const TableName = process.env.TABLE_NAME;
 
-export default async function main(evt, ctx, cb) {
+const handler = middy(listNotes).use(cors());
+
+export default handler;
+
+async function listNotes(evt, ctx, cb) {
   const params = {
     TableName,
     KeyConditionExpression: "userId = :userId",
@@ -13,8 +19,8 @@ export default async function main(evt, ctx, cb) {
 
   try {
     const result = await callDb("query", params);
-    cb(null, success(result.Items));
+    return success(result.Items);
   } catch(err) {
-    cb(null, failure({ error: err.message }));
+    return failure({ error: err.message });
   }
 }
