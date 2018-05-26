@@ -1,24 +1,29 @@
 frameworkVersion: ">=1.2.0 <2.0.0"
 
-service: notes
+service:
+  name: notes
+  publish: true
 
 provider:
   name: aws
-  runtime: nodejs6.10
+  runtime: nodejs8.10
   stage: ${opt:stage, "dev"}
   # endpointType: regional
   region: ${opt:region, "eu-west-1"}
   memorySize: 256
   environment:
-    TABLE_NAME: ${self:custom.tableName}
+    TableName: ${self:custom.tableName}
   iamRoleStatements:
     - Effect: Allow
       Action:
         - dynamodb:*
-      Resource: arn:aws:dynamodb:${self:provider.region}:*:*
+      Resource:
+        - "Fn::GetAtt": [ NotesTable, Arn ]
 
 functions:
   create:
+    name: ${self:custom.prefix}-createFn
+    description: Create a new Note
     handler: handler.create
     events:
       - http:
@@ -27,6 +32,8 @@ functions:
           cors: true
           authorizer: aws_iam
   get:
+    name: ${self:custom.prefix}-getFn
+    description: Get details for a Note by id
     handler: handler.get
     events:
       - http:
@@ -35,6 +42,8 @@ functions:
           cors: true
           authorizer: aws_iam
   list:
+    name: ${self:custom.prefix}-listFn
+    description: List all Notes belonging to the user
     handler: handler.list
     events:
       - http:
@@ -43,6 +52,8 @@ functions:
           cors: true
           authorizer: aws_iam
   update:
+    name: ${self:custom.prefix}-updateFn
+    description: Update a Note by id
     handler: handler.update
     events:
       - http:
@@ -51,6 +62,8 @@ functions:
           cors: true
           authorizer: aws_iam
   delete:
+    name: ${self:custom.prefix}-deleteFn
+    description: Delete a specific Note
     handler: handler.delete
     events:
       - http:
@@ -62,34 +75,31 @@ functions:
 resources:
   Description: ${self:service} stack
   Resources:
-    NotesTable:
-      $ref: ./resources/notes-table.yml
-    IdentityPool:
-      $ref: ./resources/identity-pool.yml
-    UserPoolClient:
-      $ref: ./resources/user-pool-client.yml
-    UserPool:
-      $ref: ./resources/user-pool.yml
-    CognitoAuthorizedRole:
-      $ref: ./resources/authorized-role.yml
-    CognitoUnAuthorizedRole:
-      $ref: ./resources/unauthorized-role.yml
-    CognitoRoleMapping:
-      $ref: ./resources/role-mapping.yml
-    AttachmentsBucket:
-      $ref: ./resources/attachments-bucket.yml
-  Outputs:
-      $ref: ./resources/outputs.yml
+    NotesTable: ${file(resources/notes-table.yml)}
+    IdentityPool: ${file(resources/identity-pool.yml)}
+    UserPoolClient: ${file(resources/user-pool-client.yml)}
+    UserPool: ${file(resources/user-pool.yml)}
+    CognitoAuthorizedRole: ${file(resources/authorized-role.yml)}
+    CognitoUnAuthorizedRole: ${file(resources/unauthorized-role.yml)}
+    CognitoRoleMapping: ${file(resources/role-mapping.yml)}
+    AttachmentsBucket: ${file(resources/attachments-bucket.yml)}
+  Outputs: ${file(resources/outputs.yml)}
 
 plugins:
   - serverless-webpack
   - serverless-stack-output
-  # - serverless-s3-remover
+  - serverless-s3-remover
+  # - serverless-offline
+
+package:
+  individually: true
 
 custom:
-  webpackIncludeModules:
-    forceExclude:
-      - aws-sdk
+  webpack:
+    packager: yarn
+    includeModules:
+      forceExclude:
+        - aws-sdk
   prefix: ${self:service}-${self:provider.stage}-${self:provider.region}
   tableName: ${self:custom.prefix}-table
   bucketName: ${self:custom.prefix}-attachments-bucket

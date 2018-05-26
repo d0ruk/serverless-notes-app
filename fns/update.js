@@ -1,36 +1,36 @@
 import middy from "middy"
 import { cors, jsonBodyParser, httpHeaderNormalizer } from "middy/middlewares"
-import { success, failure, callDb } from "../util.js"
+import { success, failure, callDb, makeUpdateExpression } from "../util.js"
+import logger from "lambda-log"
 
-const TableName = process.env.TABLE_NAME;
+const { TableName } = process.env;
 
-const handler = middy(updateNote)
+export default middy(updateNote)
   .use(httpHeaderNormalizer())
   .use(jsonBodyParser())
   .use(cors());
 
-export default handler;
-
 async function updateNote(evt, ctx, cb) {
-  const data = evt.body;
-  const params = {
+  const noteId = evt.pathParameters.id;
+  const body = evt.body;
+  const updateExpression = makeUpdateExpression(body);
+
+  logger.info(`Updating note ${noteId}`, { body, updateExpression });
+  const updateParams = {
     TableName,
     Key: {
       userId: evt.requestContext.identity.cognitoIdentityId,
-      noteId: evt.pathParameters.id
+      noteId,
     },
-    UpdateExpression: "SET content = :content, attachment = :attachment",
-    ExpressionAttributeValues: {
-      ":attachment": data.attachment ? data.attachment : null,
-      ":content": data.content ? data.content : null
-    },
-    ReturnValues: "ALL_NEW"
+    ...updateExpression,
+    ReturnValues: "ALL_NEW",
   };
 
   try {
-    const result = await callDb("update", params);
+    const result = await callDb("update", updateParams);
     return success(result);
   } catch(err) {
+    logger.error("Error @ db.update", { err/*, env: process.env*/ });
     return failure({ error: err.message });
   }
 }

@@ -1,6 +1,3 @@
-NotesTableArn:
-  Value:
-    Fn::GetAtt: [ NotesTable, Arn ]
 Region:
   Value: ${self:provider.region}
 UserPool:
