@@ -1,0 +1,20 @@
+.column {
+  margin-top: 3rem;
+
+  >* {
+    margin: .5rem 0;
+  }
+
+  textarea {
+    border: none;
+    padding: .5rem;
+    font-size: 1.5rem;
+    font-family: "Alegreya";
+    resize: none;
+    overflow-y: auto;
+  }
+}
+
+.selectBox {
+  width: 7rem;
+}

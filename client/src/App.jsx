@@ -17,6 +17,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import NewNote from "./pages/NewNote";
+import EditNote from "./pages/EditNote";
 
 import { logoutUser } from "./state/actions/auth-actions";
 import { createNote } from "./state/actions/notes-actions";
@@ -70,6 +71,7 @@ export default class App extends Component {
               <UnAuthRoute path="/login" exact component={Login} />
               <UnAuthRoute path="/signup" exact component={Signup} />
               <AuthRoute path="/add" exact component={NewNote} />
+              <AuthRoute path="/edit/:noteId" exact component={EditNote} />
               <Route
                 path="/logout"
                 exact

@@ -5,18 +5,16 @@ import { func, string, shape, number } from "prop-types";
 import {
   Row, Col,
   Input, Button,
-  Tooltip, Spin,
-  notification, Select,
+  notification,
 } from "antd";
 import { history as historyProps } from "react-router-prop-types";
 import debounce from "lodash/debounce";
-import FileReaderInput from "react-file-reader-input";
 
 import styles from "./NewNote.css";
 import { setContent, putFile, createNote } from "../state/actions/notes-actions";
-import { noteColors } from "../util";
-
-const MAX_ATTACHMENT_SIZE = 5000000;
+import SelectColor from "../components/SelectColor";
+import FileInput from "../components/FileInput";
+import { MAX_ATTACHMENT_SIZE } from "../util";
 
 @connect(
   ({ notes }) => ({ content: notes.content, error: notes.error }),
@@ -41,12 +39,11 @@ export default class NewNote extends Component {
     this.state = {
       File: null,
       uploading: false,
+      selectedColor: null,
       // need to set the initalState of content to sync with redux store
       content: props.content,
     };
   }
-
-  selectedColor = null
 
   componentDidMount() {
     this.textArea.focus();
@@ -62,7 +59,7 @@ export default class NewNote extends Component {
   }
 
   render() {
-    const { File, content, uploading } = this.state;
+    const { File, content, uploading, selectedColor } = this.state;
 
     return (
       <Row type="flex" justify="center">
@@ -80,54 +77,28 @@ export default class NewNote extends Component {
             value={content}
             onPressEnter={this.handleOnPressEnter}
           />
-          <FileReaderInput
-            as="binary"
+          <FileInput
             onChange={this.handleFileChange}
-          >
-            <Spin spinning={uploading}>
-              <Button
-                type={File ? "secondary" : "primary"}
-                icon="file-add"
-                disabled={!this.isValid()}
-              >
-                {File ? File.name : ""}
-              </Button>
-            </Spin>
-          </FileReaderInput>
+            loading={uploading}
+            File={File}
+            clearFile={() => { this.setState({ File: null }); }}
+          />
           <Row type="flex" justify="space-between">
-            <Tooltip placement="bottom" title="Clear attachment">
-              <Button
-                type="secondary"
-                icon="delete"
-                onClick={() => { this.setState({ File: null }); }}
-                disabled={!File || !this.isValid()}
-              />
-            </Tooltip>
-            <Select
-              placeholder="color"
-              allowClear
+            <SelectColor
+              value={{ key: selectedColor || "" }}
               className={styles.selectBox}
               disabled={!this.isValid()}
-              onChange={val => { this.selectedColor = val; }}
-              ref={c => { this.selectBox = c; }}
-            >
-              {noteColors.map(({ name, rgb }) => (
-                <Select.Option
-                  style={{ background: rgb }}
-                  value={rgb}
-                  key={name}
-                >
-                  {name}
-                </Select.Option>
-              ))}
-            </Select>
+              onSelect={({ key } = {}) =>
+                this.setState(() => ({ selectedColor: key }))
+              }
+            />
             <Button
               type="primary"
               onClick={this.handleSubmit}
               disabled={!this.isValid()}
               ref={c => { this.button = c; }}
             >
-                Done
+                Add
             </Button>
           </Row>
         </Col>
@@ -155,6 +126,10 @@ export default class NewNote extends Component {
   }
 
   handleOnPressEnter = evt => {
+    if (evt.ctrlKey) {
+      this.handleSubmit(evt);
+    }
+
     evt.preventDefault();
   }
 
@@ -174,13 +149,13 @@ export default class NewNote extends Component {
     event.preventDefault();
     if (!this.isValid()) return;
 
-    const { File } = this.state;
+    const { File, selectedColor } = this.state;
     const { content } = this.props;
     this.button.setState({ loading: true });
 
     const newNote = { content };
-    if (this.selectedColor) {
-      newNote.color = this.selectedColor;
+    if (selectedColor) {
+      newNote.color = selectedColor;
     }
 
     if (File) {
