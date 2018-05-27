@@ -1,13 +1,26 @@
 /* eslint function-paren-newline: 0 */
 import React from "react";
-import { Col, Card, Icon, Tooltip } from "antd";
+import { Col, Card, Icon, Tooltip, Popconfirm } from "antd";
 import { string, func } from "prop-types";
 
 import styles from "./Note.css";
 
-const Note = ({ noteId, content, attachment, color, onDelete, onDownload }) => {
+const Note = ({
+  noteId, content,
+  attachment, color,
+  onDelete, onDownload,
+  onSelect,
+}) => {
   const actions = [
-    <Icon type="delete" data-id={noteId} onClick={onDelete} />,
+    <Popconfirm
+      title="Are you sure?"
+      onConfirm={() => onDelete(noteId)}
+      // onCancel={cancel}
+      okText="Yes"
+      cancelText="No"
+    >
+      <Icon type="delete" />
+    </Popconfirm>
   ];
 
   if (attachment) {
@@ -33,8 +46,10 @@ const Note = ({ noteId, content, attachment, color, onDelete, onDownload }) => {
       <Card
         style={color ? { background: color } : {}}
         hoverable
+        data-note-id={noteId}
         actions={actions}
         className={styles.card}
+        onClick={onSelect}
       >
         {content}
       </Card>
@@ -49,6 +64,7 @@ Note.propTypes = {
   color: string,
   onDelete: func.isRequired,
   onDownload: func.isRequired,
+  onSelect: func.isRequired,
 };
 
 export default Note;

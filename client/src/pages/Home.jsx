@@ -1,17 +1,18 @@
 import React, { Component, Fragment } from "react";
-import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { Helmet } from "react-helmet";
 import { number, func, string, shape, arrayOf } from "prop-types";
 import { Row, notification } from "antd";
+import { Loader } from "@doruk/components";
+import { history as historyProps } from "react-router-prop-types";
 
 import Note from "../components/Note";
-import { getFile, getNotes, deleteNote } from "../state/actions/notes-actions";
-import { noteShape, downloadFromUrl } from "../util";
+import { getFile, listNotes, deleteNote } from "../state/actions/notes-actions";
+import { noteShape, downloadFromUrl, delay } from "../util";
 
 @connect(
   ({ notes }) => ({ notes: notes.all, error: notes.error }),
-  { getFile, getNotes, deleteNote },
+  { getFile, listNotes, deleteNote },
 )
 export default class Home extends Component {
   static propTypes = {
@@ -20,18 +21,44 @@ export default class Home extends Component {
       msg: string,
       timestamp: number,
     }),
-    getNotes: func.isRequired,
+    listNotes: func.isRequired,
     deleteNote: func.isRequired,
     getFile: func.isRequired,
+    history: historyProps,
+  }
+
+  state = {
+    isLoading: true
   }
 
   componentWillMount = async () => {
-    await this.props.getNotes();
+    try {
+      this.setState({ isLoading: true });
+      await Promise.race([
+        this.props.listNotes(),
+        delay(7000, { reject: true, reason: "TIMEOUT" })
+      ]);
+      this.setState({ isLoading: false });
+    } catch (err) {
+      if (/TIMEOUT/.test(err)) {
+        notification.warning({ message: "Timed out. Please refresh." });
+      } else {
+        notification.warning({ message: err.message });
+      }
+    }
   }
 
   componentWillUpdate = nProps => {
-    const { error: { msg, timestamp } } = nProps;
+    const {
+      notes,
+      error: { msg, timestamp }
+    } = nProps;
     const { error } = this.props;
+
+    if (!notes.length) {
+      // fetched an empty list of notes
+      this.props.history.push("/add");
+    }
 
     if (msg && error.timestamp !== timestamp) {
       notification.error({ message: msg });
@@ -40,15 +67,20 @@ export default class Home extends Component {
 
   render() {
     const { notes } = this.props;
+    const { isLoading } = this.state;
 
     return (
       <Row type="flex" align="bottom">
         <Helmet>
           <title>Home</title>
         </Helmet>
-        {notes.length
-          ? this.renderNotes(notes)
-          : <Redirect to="/add" />}
+        {isLoading
+          ? <Loader
+            fullscreen="rgba(255,255,0,.5)"
+            fill="rebeccapurple"
+            variant="rect5"
+          />
+          : this.renderNotes(notes)}
       </Row>
     );
   }
@@ -61,15 +93,13 @@ export default class Home extends Component {
           {...note}
           onDelete={this.handleDelete}
           onDownload={this.handleDownload}
+          onSelect={this.handleSelect}
         />
       ))}
     </Fragment>
   )
 
-  handleDelete = evt => {
-    const { id } = evt.target.dataset;
-    this.props.deleteNote(id);
-  }
+  handleDelete = noteId => this.props.deleteNote(noteId);
 
   handleDownload = async evt => {
     const { filename } = evt.target.dataset;
@@ -77,6 +107,16 @@ export default class Home extends Component {
 
     if (presignedURL) {
       downloadFromUrl(presignedURL);
+    }
+  }
+
+  handleSelect = evt => {
+    const { target, currentTarget } = evt;
+
+    // exclude clicks from the actions bar (below content)
+    if (target.classList.contains("ant-card-body")) {
+      const { noteId } = currentTarget.dataset;
+      this.props.history.push(`/edit/${noteId}`);
     }
   }
 }
