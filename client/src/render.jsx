@@ -2,15 +2,13 @@ import React from "react";
 import { render } from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/es/integration/react";
 import { element } from "prop-types";
 
 import createStore from "./state";
 import { getCurrentUser } from "./util";
 import { setValidUser } from "./state/actions/auth-actions";
 
-// TODO: remove persist
-const { persistor, store } = createStore();
+const store = createStore();
 const isProd = process.env.NODE_ENV === "production";
 
 if (!isProd) {
@@ -33,11 +31,9 @@ class Root extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <PersistGate persistor={persistor}>
-          <Router>
-            {this.props.children}
-          </Router>
-        </PersistGate>
+        <Router>
+          {this.props.children}
+        </Router>
       </Provider>
     );
   }

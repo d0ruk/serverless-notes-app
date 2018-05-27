@@ -38,17 +38,23 @@ export const deleteNote = noteId => ({
   },
 });
 
-export const updateNote = noteId => ({
+export const updateNote = (noteId, body) => ({
   type: types.UPDATE_NOTE,
-  payload: API.put("notes", `/notes/${noteId}`),
+  payload: API.put("notes", `/notes/${noteId}`, { body }),
+  meta: {
+    dontCatch: true,
+  },
 });
 
 export const getNote = noteId => ({
   type: types.GET_NOTE,
   payload: API.get("notes", `/notes/${noteId}`),
+  meta: {
+    dontCatch: true,
+  },
 });
 
-export const getNotes = () => ({
+export const listNotes = () => ({
   type: types.LIST_NOTES,
   payload: API.get("notes", "/notes"),
 });
