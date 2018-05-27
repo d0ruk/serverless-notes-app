@@ -9,14 +9,14 @@ Required;
 
 Backend
 
-  1. ```npm install```
+  1. ```yarn```
   2. ```sls deploy``` (alternatively, ```sls deploy -r us-west-2 -s canary```)
   3. To test the Cognito/API Gateway integration, create a cognito user as shown [here](https://serverless-stack.com/chapters/test-the-apis.html), and run ```apig-test.js``` with the details of the created user.
 
 Frontend (CRA app in /client)
 
-1. npm install
-2. npm start
+1. yarn
+2. yarn start
 
 ### Offline
 
