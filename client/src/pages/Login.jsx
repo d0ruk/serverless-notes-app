@@ -7,7 +7,7 @@ import { history as historyProps } from "react-router-prop-types";
 
 import styles from "./Login.css";
 import { loginUser, setEmail, setPassword } from "../state/actions/auth-actions";
-import { makeUsername } from "../util";
+import { makeUsername, delay } from "../util";
 
 @connect(
   ({ auth: { email, password, error } }) => ({ email, password, error }),
@@ -39,7 +39,7 @@ export default class Login extends Component {
       notification.error({ message: msg });
 
       if (/User does not exist/.test(msg)) {
-        await new Promise(res => setTimeout(res, 1000));
+        await delay(1000);
         this.props.history.push("/signup");
       }
     }

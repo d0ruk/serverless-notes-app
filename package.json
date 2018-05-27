@@ -1,8 +1,7 @@
 {
   "name": "notes-app-api",
-  "version": "0.0.7",
+  "version": "0.2.1",
   "description": "note taking app",
-  "main": "handler.js",
   "scripts": {},
   "keywords": [
     "serverless",

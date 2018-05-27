@@ -38,6 +38,11 @@ export default function notesReducer(state = initialState, { type, payload }) {
         timestamp: Date.now(),
       },
     };
+  case `${GET_NOTE}_FULFILLED`:
+    return {
+      ...state,
+      content: payload.content,
+    };
   case `${CREATE_NOTE}_FULFILLED`:
     return {
       ...initialState,

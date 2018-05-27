@@ -5,6 +5,7 @@ import { number, string, shape } from "prop-types";
 
 const isProd = process.env.NODE_ENV === "production";
 
+export const MAX_ATTACHMENT_SIZE = 10000000;
 export const noteShape = shape({
   noteId: string.isRequired,
   content: string.isRequired,
@@ -102,3 +103,12 @@ export const downloadFromUrl = url => {
   a.click();
   a.remove();
 };
+
+export const delay = (
+  dt = 1000,
+  { reject = false, reason = "INTERNAL" } = {}
+) => (
+  new Promise((res, rej) => {
+    setTimeout(reject ? rej.bind(null, reason) : res.bind(null, reason), dt);
+  })
+);

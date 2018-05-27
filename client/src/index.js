@@ -6,6 +6,9 @@ import StackOutput from "../../output.json";
 import render from "./render";
 import App from "./App";
 
+const isProd = process.env.NODE_ENV === "production";
+if (!isProd) window.stackOutput = StackOutput;
+
 Amplify.configure({
   Auth: {
     identityPoolId: StackOutput.IdentityPool,
@@ -25,6 +28,7 @@ Amplify.configure({
       {
         name: "notes",
         endpoint: StackOutput.ServiceEndpoint,
+        region: StackOutput.Region,
       },
     ]
   }
@@ -35,7 +39,7 @@ Amplify.configure({
 render(App);
 
 /* eslint-disable */
-if (module.hot && process.env.NODE_ENV !== "production") {
+if (module.hot && !isProd) {
   module.hot.accept("./App.jsx", () => {
     const NewApp = require("./App.jsx").default;
     render(NewApp);
