@@ -1,4 +1,9 @@
-An implementation of the [Serverless Stack](http://serverless-stack.com) example app. (2/3 complete)
+An implementation of the [Serverless Stack](http://serverless-stack.com) demo app. (2/3 complete)
+
+Required;
+
+* [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-quick-configuration)
+* npm install -g serverless
 
 ### Usage
 
@@ -6,7 +11,7 @@ Backend
 
   1. ```npm install```
   2. ```sls deploy``` (alternatively, ```sls deploy -r us-west-2 -s canary```)
-  3. Create a cognito user as shown [here](https://serverless-stack.com/chapters/test-the-apis.html). The ```apig-test.js``` module is a helper for that.
+  3. To test the Cognito/API Gateway integration, create a cognito user as shown [here](https://serverless-stack.com/chapters/test-the-apis.html), and run ```apig-test.js``` with the details of the created user.
 
 Frontend (CRA app in /client)
 
@@ -21,4 +26,4 @@ Frontend (CRA app in /client)
 
 ### Notes
 
-* Every time a different stage (i.e. -s canary) is deployed, the ```output.json``` is **overwritten** with the latest resources details. Be mindful of what resources the client app is using.  Either use the AWS console or do ```sls remove -s somestage``` to clean stale deployments.
+* Every time a different stage (i.e. -s canary) is deployed, the ```output.json``` is **overwritten** with the latest stack output. Be mindful of what resources the client app is using.  Either use the AWS console or do ```sls remove -s somestage``` to clean stale deployments.
