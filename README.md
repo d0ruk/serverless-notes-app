@@ -1,4 +1,6 @@
-An implementation of the [Serverless Stack](http://serverless-stack.com) demo app. (2/3 complete)
+An implementation of the [Serverless Stack](http://serverless-stack.com) demo app.
+
+##### TODO: upgrade to v3
 
 Required;
 
@@ -15,8 +17,8 @@ Backend
 
 Frontend (CRA app in /client)
 
-1. yarn
-2. yarn start
+1. ```yarn```
+2. ```yarn start```
 
 ### Offline
 

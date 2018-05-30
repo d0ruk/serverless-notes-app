@@ -9,7 +9,7 @@ module.exports = {
     libraryTarget: "commonjs",
     path: path.join(__dirname, ".webpack"),
     filename: "[name].js",
-    sourceMapFilename: "[file].js.map"
+    sourceMapFilename: "[file].map"
   },
   optimization: { minimize: false },
   target: "node",
