@@ -2,7 +2,7 @@
   display: flex;
   padding: .3em;
   border-radius: 7px;
-  
+
   &:hover {
     background: rgba(255,255,255,.3);
   }
