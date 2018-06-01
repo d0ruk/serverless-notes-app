@@ -16,7 +16,7 @@ import {
   signupUser, resendSignUp,
   confirmSignUp, loginUser,
 } from "../state/actions/auth-actions";
-import { makeUsername } from "../util";
+import { isEmail } from "../util";
 
 @connect(
   ({ auth: { email, password, error } }) => ({ email, password, error }),
@@ -134,7 +134,7 @@ export default class SignUp extends Component {
             type="secondary"
             icon="reload"
             onClick={this.handleResend}
-            disabled={!makeUsername(email)}
+            disabled={!isEmail(email)}
             ref={c => { this.reSendbutton = c; }}
           />
         </Tooltip>
@@ -190,11 +190,11 @@ export default class SignUp extends Component {
     const { email, password } = this.props;
     const { activeTab } = this.state;
     const validPassword = activeTab === "verify"
-      // if verifying, password validity is irrelevant to the UI
+    // if verifying, password validity is irrelevant to the UI
       ? true
       : password !== "" && password.length > 7;
 
-    return Boolean(makeUsername(email)) && validPassword;
+    return isEmail(email) && validPassword;
   }
 
   handleSubmit = async evt => {
@@ -203,28 +203,27 @@ export default class SignUp extends Component {
 
     const { email, password } = this.props;
     const { activeTab } = this.state;
-    // we need a throw-away username for the signup & verify steps
-    // user can still login with their email
-    const derivedUsername = makeUsername(email);
 
     switch (activeTab) {
     case "signup": {
       let tempUser;
       const confirmInput = this.confirmField.input;
-      const resetField = () => {
+      const resetField = ({ message = "" } = {}) => {
+        if (message) notification.warn({ message });
+
         confirmInput.value = "";
         this.props.setPassword("");
         this.passwordField.focus();
       };
 
       if (confirmInput.value !== password) {
-        resetField();
+        resetField({ message: "Passwords don't match." });
         break;
       }
 
       this.button.setState({ loading: true });
       try {
-        const { value } = await this.props.signupUser(derivedUsername, password, email);
+        const { value } = await this.props.signupUser(email, password);
         // an unconfirmed Cognito user
         tempUser = value.user;
       } catch (_) {
@@ -239,19 +238,21 @@ export default class SignUp extends Component {
     case "verify": {
       const verifyInput = this.verifyField.input;
       const { tempUser } = this.state;
-      const resetField = () => {
+      const resetField = ({ message = "" } = {}) => {
+        if (message) notification.warn({ message });
+
         verifyInput.value = "";
         this.verifyField.focus();
       };
 
       if (!/^\d{6}$/.test(verifyInput.value)) {
-        resetField();
+        resetField({ message: "Invalid verification code." });
         break;
       }
 
       this.button.setState({ loading: true });
       try {
-        await this.props.confirmSignUp(derivedUsername, verifyInput.value);
+        await this.props.confirmSignUp(email, verifyInput.value);
 
         if (tempUser) {
           // we check only for the existence of the Cognito user
@@ -276,11 +277,9 @@ export default class SignUp extends Component {
 
   handleResend = async () => {
     const { email } = this.props;
-    // we need the same derived username for resend
-    const derivedUsername = makeUsername(email);
 
     this.reSendbutton.setState({ loading: true });
-    await this.props.resendSignUp(derivedUsername);
+    await this.props.resendSignUp(email);
     this.reSendbutton.setState({ loading: false });
   }
 

@@ -1,7 +1,7 @@
 Type: AWS::Cognito::UserPool
 Properties:
   UserPoolName: ${self:custom.userPoolName}
-  AliasAttributes:
+  UsernameAttributes:
     - email
   AutoVerifiedAttributes:
     - email
@@ -12,7 +12,7 @@ Properties:
       Mutable: false
       Required: true
   EmailVerificationMessage: Verification code {####}.
-  EmailVerificationSubject: ${file(./package.json):name} | Verify
+  EmailVerificationSubject: ${self:service.name} | Verify
   Policies:
     PasswordPolicy:
       MinimumLength: 8
@@ -20,3 +20,7 @@ Properties:
       RequireNumbers: true
       RequireUppercase: true
       RequireSymbols: false
+  AdminCreateUserConfig:
+    AllowAdminCreateUserOnly: false
+    UnusedAccountValidityDays: 14
+  MfaConfiguration: "OFF"

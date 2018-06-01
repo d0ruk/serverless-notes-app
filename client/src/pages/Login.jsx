@@ -7,7 +7,7 @@ import { history as historyProps } from "react-router-prop-types";
 
 import styles from "./Login.css";
 import { loginUser, setEmail, setPassword } from "../state/actions/auth-actions";
-import { makeUsername, delay } from "../util";
+import { delay, isEmail } from "../util";
 
 @connect(
   ({ auth: { email, password, error } }) => ({ email, password, error }),
@@ -110,8 +110,8 @@ export default class Login extends Component {
 
   isValid = () => {
     const { email, password } = this.props;
-    // regex to test email pattern is in makeUsername
-    return !!makeUsername(email) && password !== "";
+
+    return isEmail(email) && password !== "";
   }
 
   handleSubmit = async evt => {

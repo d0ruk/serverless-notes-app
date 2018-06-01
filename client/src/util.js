@@ -77,20 +77,7 @@ export const getUserToken = async cognitoUser => {
   }
 };
 
-// https://forums.aws.amazon.com/thread.jspa?threadID=259349&tstart=0
-export const makeUsername = email => {
-  const REGEX = /(\S+)@(\S+)\.(\S+)/;
-
-  if (!REGEX.test(email)) return false;
-
-  const deStructuredEmailPattern = email.match(REGEX);
-
-  return (
-    deStructuredEmailPattern[1] + "_" + // eslint-disable-line
-    deStructuredEmailPattern[2] + "_" +
-    deStructuredEmailPattern[3]
-  );
-};
+export const isEmail = str => /(\S+)@(\S+)\.(\S+)/.test(str);
 
 export const downloadFromUrl = url => {
   const a = document.createElement("a");
@@ -105,7 +92,7 @@ export const downloadFromUrl = url => {
 };
 
 export const delay = (
-  dt = 1000,
+  dt = 700,
   { reject = false, reason = "INTERNAL" } = {}
 ) => (
   new Promise((res, rej) => {
