@@ -9,14 +9,13 @@ export default middy(getNote).use(cors());
 
 async function getNote(evt, ctx) {
   const noteId = evt.pathParameters.id;
+  const userId = evt.requestContext.identity.cognitoIdentityId;
   const params = {
     TableName,
-    Key: {
-      userId: evt.requestContext.identity.cognitoIdentityId,
-      noteId
-    }
+    Key: { userId, noteId }
   };
 
+  logger.info(`Getting note ${noteId} for ${userId}`);
   try {
     const result = await callDb("get", params);
 

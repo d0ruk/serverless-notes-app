@@ -10,12 +10,10 @@ export default middy(updateNote)
   .use(jsonBodyParser())
   .use(cors());
 
-async function updateNote(evt, ctx, cb) {
+async function updateNote(evt, ctx) {
   const noteId = evt.pathParameters.id;
   const body = evt.body;
   const updateExpression = makeUpdateExpression(body);
-
-  logger.info(`Updating note ${noteId}`, { body, updateExpression });
   const updateParams = {
     TableName,
     Key: {
@@ -26,6 +24,7 @@ async function updateNote(evt, ctx, cb) {
     ReturnValues: "ALL_NEW",
   };
 
+  logger.info(`Updating note ${noteId}`, { body, updateExpression });
   try {
     const result = await callDb("update", updateParams);
     return success(result);

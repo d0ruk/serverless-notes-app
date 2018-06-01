@@ -2,10 +2,7 @@
   "name": "notes-app-api",
   "version": "0.2.1",
   "description": "note taking app",
-  "scripts": {
-    "start": "sls deploy",
-    "pack": "sls webpack"
-  },
+  "scripts": {},
   "keywords": [
     "serverless",
     "stack",
@@ -35,8 +32,8 @@
     "webpack-node-externals": "^1.6.0"
   },
   "dependencies": {
-    "lambda-log": "^1.4.0",
-    "middy": "^0.15.0",
+    "lambda-log": "^1.3.0",
+    "middy": "^0.14.0",
     "uuid": "^3.2.1"
   }
 }

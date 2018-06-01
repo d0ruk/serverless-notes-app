@@ -12,16 +12,19 @@ export default middy(createNote)
   .use(cors());
 
 async function createNote(evt, ctx) {
+  const userId = evt.requestContext.identity.cognitoIdentityId;
+  const noteId = uuid.v1();
   const params = {
     TableName,
     Item: {
-      userId: evt.requestContext.identity.cognitoIdentityId,
-      noteId: uuid.v1(),
+      userId,
+      noteId,
       createdAt: new Date().getTime(),
       ...evt.body
     }
   }
 
+  logger.info(`Creating note ${noteId} for ${userId}`);
   try {
     await callDb("put", params);
     return success(params.Item);

@@ -7,15 +7,15 @@ const { TableName } = process.env;
 
 export default middy(deleteNote).use(cors());
 
-async function deleteNote(evt, ctx, cb) {
+async function deleteNote(evt, ctx) {
+  const noteId = evt.pathParameters.id;
+  const userId = evt.requestContext.identity.cognitoIdentityId;
   const params = {
     TableName,
-    Key: {
-      userId: evt.requestContext.identity.cognitoIdentityId,
-      noteId: evt.pathParameters.id
-    }
+    Key: { userId, noteId }
   };
 
+  logger.info(`Deleting note ${noteId} for ${userId}`);
   try {
     const result = await callDb("delete", params);
     return success(result);

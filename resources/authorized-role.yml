@@ -28,8 +28,11 @@ Properties:
           - Effect: Allow
             Action:
               - s3:*
+            # TODO: "arn:aws:s3:::${bucketname}/private/${cognitoidentity.amazonaws.com:sub}/*"
             Resource: "*"
           - Effect: Allow
             Action:
               - execute-api:Invoke
+            # TODO "arn:aws:executeapi:${region}:*:YOUR_API_GATEWAY_ID/*"
+            #  { "Ref" : "ApiGatewayRestApi" }
             Resource: arn:aws:execute-api:${self:provider.region}:*

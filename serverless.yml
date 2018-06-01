@@ -11,6 +11,7 @@ provider:
   # endpointType: regional
   region: ${opt:region, "eu-west-1"}
   memorySize: 256
+  timeout: 10
   environment:
     TableName: ${self:custom.tableName}
   iamRoleStatements:
@@ -19,6 +20,9 @@ provider:
         - dynamodb:*
       Resource:
         - "Fn::GetAtt": [ NotesTable, Arn ]
+  stackTags:
+    REGION: ${self:provider.region}
+    RUNTIME: ${self:provider.runtime}
 
 functions:
   create:
@@ -73,7 +77,7 @@ functions:
           authorizer: aws_iam
 
 resources:
-  Description: ${self:service} stack
+  Description: ${self:service.name} stack
   Resources:
     NotesTable: ${file(resources/notes-table.yml)}
     IdentityPool: ${file(resources/identity-pool.yml)}
