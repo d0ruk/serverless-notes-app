@@ -17,7 +17,7 @@ import FileInput from "../components/FileInput";
 import { MAX_ATTACHMENT_SIZE } from "../util";
 
 @connect(
-  ({ notes }) => ({ content: notes.content, error: notes.error }),
+  ({ notes: { content, error } }) => ({ content, error }),
   { setContent, putFile, createNote },
 )
 export default class NewNote extends Component {

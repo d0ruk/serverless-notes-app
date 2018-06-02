@@ -39,7 +39,7 @@ Amplify.configure({
 render(App);
 
 /* eslint-disable */
-if (module.hot && !isProd) {
+if (module.hot) {
   module.hot.accept("./App.jsx", () => {
     const NewApp = require("./App.jsx").default;
     render(NewApp);

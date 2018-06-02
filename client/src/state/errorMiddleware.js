@@ -15,8 +15,6 @@ export default store => next => action => { // eslint-disable-line
         const reason = typeof error === "string" ? error : error.message;
         console.warn(`${action.type} caught at middleware with reason: ${reason}.`); // eslint-disable-line
       }
-
-      return error;
     });
 };
 

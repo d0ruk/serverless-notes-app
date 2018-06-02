@@ -25,7 +25,7 @@ import { makeRandomNote } from "./util";
 
 @withRouter
 @connect(
-  ({ auth }) => ({ cognitoUser: auth.cognitoUser }),
+  ({ auth: { cognitoUser } }) => ({ cognitoUser }),
   { logoutUser, createNote },
 )
 export default class App extends Component {

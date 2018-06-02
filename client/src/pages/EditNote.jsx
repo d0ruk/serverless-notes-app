@@ -18,7 +18,7 @@ import FileInput from "../components/FileInput";
 import SelectColor from "../components/SelectColor";
 
 @connect(
-  ({ notes }) => ({ content: notes.content }),
+  ({ notes: { content } }) => ({ content }),
   { getNote, updateNote, setContent, putFile },
 )
 export default class EditNote extends Component {
@@ -180,6 +180,7 @@ export default class EditNote extends Component {
 
     // selectedColor is undefined if cleared
     // but backend (update fn) expects null value
+    // to clear a key on the note 'entity'
     newNote.color = selectedColor || null;
 
     // if File is an instance from the FileReader API

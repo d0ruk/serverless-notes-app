@@ -11,7 +11,7 @@ import { getFile, listNotes, deleteNote } from "../state/actions/notes-actions";
 import { noteShape, downloadFromUrl, delay } from "../util";
 
 @connect(
-  ({ notes }) => ({ notes: notes.all, error: notes.error }),
+  ({ notes: { all, error } }) => ({ notes: all, error }),
   { getFile, listNotes, deleteNote },
 )
 export default class Home extends Component {
