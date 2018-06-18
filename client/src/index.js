@@ -1,6 +1,6 @@
+// TODO: import { ServiceWorker } from 'aws-amplify';
 import Amplify from "aws-amplify";
 
-// import registerServiceWorker from "./registerServiceWorker";
 import "./index.css";
 import StackOutput from "../../output.json";
 import render from "./render";
@@ -34,8 +34,6 @@ Amplify.configure({
   }
 });
 
-// TODO: enable service workers after out the caching hell
-// registerServiceWorker();
 render(App);
 
 /* eslint-disable */
