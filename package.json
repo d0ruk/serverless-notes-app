@@ -2,7 +2,10 @@
   "name": "notes-app-api",
   "version": "0.2.1",
   "description": "note taking app",
-  "scripts": {},
+  "scripts": {
+    "start": "sls deploy",
+    "lint": "eslint fns apig-test.js util.js handler.js"
+  },
   "keywords": [
     "serverless",
     "stack",

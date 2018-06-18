@@ -4,7 +4,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom"
+    "lint": "eslint --ext .js,.jsx src"
   },
   "author": "Doruk Kutlu",
   "repository": {
@@ -14,8 +14,8 @@
   "license": "MIT",
   "dependencies": {
     "@doruk/components": "^1.7.0",
-    "antd": "^3.5.4",
-    "aws-amplify": "^0.4.1",
+    "antd": "^3.6.2",
+    "aws-amplify": "^0.4.4",
     "lodash": "^4.17.5",
     "object-assign": "4.1.1",
     "promise": "8.0.1",
