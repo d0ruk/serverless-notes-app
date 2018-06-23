@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Layout, notification } from "antd";
-import { Route, Switch, Redirect, withRouter } from "react-router-dom";
+import { Route, Switch, withRouter } from "react-router-dom";
 import { object, func } from "prop-types";
 import { connect } from "react-redux";
 import { Helmet } from "react-helmet";
@@ -15,24 +15,23 @@ import Footer from "./components/Footer";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import Logout from "./pages/Logout";
 import Signup from "./pages/Signup";
 import NewNote from "./pages/NewNote";
 import EditNote from "./pages/EditNote";
 
-import { logoutUser } from "./state/actions/auth-actions";
 import { createNote } from "./state/actions/notes-actions";
 import { makeRandomNote } from "./util";
 
 @withRouter
 @connect(
   ({ auth: { cognitoUser } }) => ({ cognitoUser }),
-  { logoutUser, createNote },
+  { createNote },
 )
 export default class App extends Component {
   static childContextTypes = { cognitoUser: object };
   static propTypes = {
-    cognitoUser: object, // TODO: shape
-    logoutUser: func.isRequired,
+    cognitoUser: object, // eslint-disable-line
     createNote: func.isRequired,
   };
 
@@ -51,8 +50,6 @@ export default class App extends Component {
   }
 
   render() {
-    const { cognitoUser } = this.props;
-
     return (
       <Layout className={styles.wrapper}>
         <Helmet
@@ -72,18 +69,7 @@ export default class App extends Component {
               <UnAuthRoute path="/signup" exact component={Signup} />
               <AuthRoute path="/add" exact component={NewNote} />
               <AuthRoute path="/edit/:noteId" exact component={EditNote} />
-              <Route
-                path="/logout"
-                exact
-                render={() => {
-                  if (cognitoUser) {
-                    this.props.logoutUser();
-                  }
-                  // TODO: BUG: redirects to / while action in progress
-                  // thus LIST_NOTES is dispatched without a user in state
-                  return <Redirect to="/login" />;
-                }}
-              />
+              <Route path="/logout" exact component={Logout} />
               <Route component={NotFound} />
             </Switch>
           </Layout.Content>
