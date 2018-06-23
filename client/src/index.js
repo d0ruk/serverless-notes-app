@@ -11,6 +11,7 @@ if (!isProd) window.stackOutput = StackOutput;
 
 Amplify.configure({
   Auth: {
+    // mandatorySignIn: true,
     identityPoolId: StackOutput.IdentityPool,
     region: StackOutput.Region,
     userPoolId: StackOutput.UserPool,

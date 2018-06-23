@@ -91,15 +91,13 @@ export default class Home extends Component {
         <Note
           key={note.noteId}
           {...note}
-          onDelete={this.handleDelete}
+          onDelete={this.props.deleteNote}
           onDownload={this.handleDownload}
           onSelect={this.handleSelect}
         />
       ))}
     </Fragment>
   )
-
-  handleDelete = noteId => this.props.deleteNote(noteId);
 
   handleDownload = async evt => {
     const { filename } = evt.target.dataset;

@@ -64,9 +64,7 @@ NavBar.contextTypes = {
 
 export default withRouter(NavBar);
 
-
-/* eslint-disable */
-function renderSettings({ handleAdd }) {
+function renderSettings({ handleAdd }) { // eslint-disable-line
   return (
     <Menu.SubMenu
       key="setting"

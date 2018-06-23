@@ -41,7 +41,7 @@ export default class EditNote extends Component {
       selectedColor: "",
       initialNote: {}, // eslint-disable-line
       uploading: false,
-      content: props.content,
+      content: props.content || "",
       File: "",
     };
   }
