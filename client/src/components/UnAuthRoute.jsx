@@ -1,10 +1,10 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { func, object } from "prop-types";
-import { parse } from "query-string";
+import { parse } from "querystring";
 
 const UnAuthRoute = ({ component: C, ...rest }, { cognitoUser }) => {
-  const { redirect } = parse(window.location.search);
+  const { redirect } = parse(window.location.search.slice(1));
 
   return (
     <Route
