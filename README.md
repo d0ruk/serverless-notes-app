@@ -5,19 +5,19 @@ An implementation of the [Serverless Stack](http://serverless-stack.com) demo ap
 Required;
 
 * [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-quick-configuration)
-* npm install -g serverless
+* ```npm install -g serverless```
 
 ## Usage
 
-#### Backend
+#### Backend (*./*)
 
 ```sh
   > yarn
   > sls deploy # alternatively, sls deploy -r us-west-2 -s canary
 ```
-  To test the Cognito/API Gateway integration, create a cognito user as shown [here](https://serverless-stack.com/chapters/test-the-apis.html), and run ```apig-test.js``` with the details of the created user.
+  To test the Cognito/API Gateway integration, create a cognito user as shown [here](https://serverless-stack.com/chapters/test-the-apis.html), and run ```apig-test.js``` with the details of the created user. (edit ```userDetails```)
 
-#### Frontend (CRA app in **/client**)
+#### Frontend (**./client/**)
 
 ```sh
 > yarn

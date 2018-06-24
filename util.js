@@ -32,8 +32,10 @@ export function buildResponse(statusCode, body, headers={}) {
 }
 
 // a very crude function to construct the UpdateExpression
-// for the ddb.update operation - this would (probably) only work
-// (barely) for this specific use-case
+// for the ddb.update operation - this would (probably)
+// only work (barely) for this specific use-case
+// which is building an expression with a combination of
+// SET and REMOVE directives
 export function makeUpdateExpression(obj) {
   const toSet = [];
   const toRemove = [];

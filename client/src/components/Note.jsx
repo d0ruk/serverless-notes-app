@@ -15,7 +15,6 @@ const Note = ({
     <Popconfirm
       title="Are you sure?"
       onConfirm={() => onDelete(noteId)}
-      // onCancel={cancel}
       okText="Yes"
       cancelText="No"
     >
