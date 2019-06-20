@@ -32,7 +32,8 @@ const getRoutes = loggedIn => [{
   }]);
 
 const NavBar = ({ location, ...rest }, { cognitoUser }) => {
-  const validRoutes = getRoutes(Boolean(cognitoUser));
+  const isLoggedIn = Boolean(cognitoUser);
+  const validRoutes = getRoutes(isLoggedIn);
   // currentRoute might be undefined between redirect renders
   const currentRoute = validRoutes.find(e => e.href === location.pathname);
 
@@ -48,7 +49,7 @@ const NavBar = ({ location, ...rest }, { cognitoUser }) => {
           <Link to={href}>{name}</Link>
         </Menu.Item>
       ))}
-      {!isProd && renderSettings({ ...rest })}
+      {!isProd && isLoggedIn && renderSettings({ ...rest })}
     </Menu>
   );
 };
