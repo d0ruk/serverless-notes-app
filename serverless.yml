@@ -92,8 +92,6 @@ resources:
 plugins:
   - serverless-webpack
   - serverless-stack-output
-  - serverless-s3-remover
-  # - serverless-offline
 
 package:
   individually: true
@@ -104,7 +102,7 @@ custom:
     includeModules:
       forceExclude:
         - aws-sdk
-  prefix: ${self:service}-${self:provider.stage}-${self:provider.region}
+  prefix: ${self:service}-${self:provider.stage}-${sls:instanceId}
   tableName: ${self:custom.prefix}-table
   bucketName: ${self:custom.prefix}-attachments-bucket
   userPoolName: ${self:custom.prefix}-userpool
@@ -112,7 +110,3 @@ custom:
   clientName: ${self:custom.prefix}-${file(./package.json):name}
   output:
     file: ./output.json
-  remover:
-    prompt: true
-    buckets:
-      - ${self:custom.bucketName}
