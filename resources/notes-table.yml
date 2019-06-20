@@ -12,5 +12,5 @@ Properties:
     - AttributeName: noteId
       KeyType: RANGE
   ProvisionedThroughput:
-    ReadCapacityUnits: 10
-    WriteCapacityUnits: 10
+    ReadCapacityUnits: 3
+    WriteCapacityUnits: 1
