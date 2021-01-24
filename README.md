@@ -1,3 +1,5 @@
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fd0ruk%2Fserverless-notes-app.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fd0ruk%2Fserverless-notes-app?ref=badge_shield)
+
 An implementation of the [Serverless Stack](http://serverless-stack.com) demo app.
 
 Required;
@@ -33,3 +35,7 @@ Required;
 ### Notes
 
 * Every time a different stage (i.e. -s canary) is deployed, the ```output.json``` is **overwritten** with the latest stack output. Be mindful of what resources the client app is using.  Either use the AWS console or do ```sls remove -s somestage``` to clean stale deployments.
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fd0ruk%2Fserverless-notes-app.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fd0ruk%2Fserverless-notes-app?ref=badge_large)
