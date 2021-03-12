@@ -121,7 +121,7 @@
     "postcss-import-url": "^3.0.4",
     "postcss-loader": "^2.1.0",
     "postcss-nested": "^3.0.0",
-    "react-dev-utils": "^4.2.1",
+    "react-dev-utils": "^11.0.4",
     "style-loader": "^0.19.1",
     "sw-precache-webpack-plugin": "0.11.4",
     "url-loader": "0.6.2",
