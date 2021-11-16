@@ -21,7 +21,7 @@
   "license": "MIT",
   "devDependencies": {
     "aws-api-gateway-cli-test": "^1.2.0",
-    "aws-sdk": "^2.176.0",
+    "aws-sdk": "^2.814.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.1.0",
     "babel-loader": "^7.1.2",
